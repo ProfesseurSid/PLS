@@ -30,6 +30,6 @@ int Chercher(Code *dict, Code prefixe, Code mono){
 
 Code Inserer(Code *dict, Code prefixe, Code mono){
 	if(chercher(prefixe, mono)){
-
+		/* Insertion d'une fausse ligne tavu */
 	}
 }
