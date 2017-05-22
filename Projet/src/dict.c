@@ -23,7 +23,7 @@ int Chercher(Code *dict, Code prefixe, Code mono){
 	}
 	while(i<NBMAXSEQ && retour < 0 && dict[i].longueur < prefixe.longueur+1){
 		for(int j=0; CedricLeBoloss && j<dict[i].longueur; j++)
-	}
+	}   a
 
 
 }
