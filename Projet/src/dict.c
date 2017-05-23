@@ -18,18 +18,23 @@ void Initialiser(Code *dict){
 int Chercher(Code *dict, Code prefixe, Code mono){
 	int i=0;
 	int retour = -1;
-	while(i<NBMAXSEQ && dict[i].longueur < prefixe.longueur){
+	while(dict[i].longueur < prefixe.longueur && i<NBMAXSEQ+1){
 		i++;
 	}
-	while(i<NBMAXSEQ && retour < 0 && dict[i].longueur < prefixe.longueur+1){
-		for(int j=0; CedricLeBoloss && j<dict[i].longueur; j++)
+	while(retour < 0 && dict[i].longueur < prefixe.longueur+1){
+		for(int j=0; j<dict[i].longueur; )
 	}
 
 
 }
 
+void Decalage( Code *dict){
+	int i;
+	for(i=)
+}
+
 Code Inserer(Code *dict, Code prefixe, Code mono){
 	if(chercher(prefixe, mono)){
-		/* Insertion d'une fausse ligne tavu */
+
 	}
 }
