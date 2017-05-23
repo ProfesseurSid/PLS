@@ -7,6 +7,6 @@ git pull /** Récep info */
 
 
 
-git config --global user.email "cedric.lafrasse@gmail.com"
+git config --global user.email "mail@"
 
 
