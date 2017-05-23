@@ -88,8 +88,3 @@ fprintf(result,sortie);
 fclose(result);
 fclose(f);
 }
-
-
-
-
-
