@@ -7,7 +7,6 @@ void compression(char* f,char* result_compress) {
 
 int* w;
 int a;
-
 //La longueur du mot courant
 int wlength=1;
 
@@ -39,7 +38,7 @@ if(fp == NULL) {
 	
 //Allocation d'une case pour stocker le caractère lu
 w = malloc ( wlength * sizeof (int) ) ;
-*w = fgetchar() ;
+*w = fgetc(fp) ;
 
 //Création et ouverture du fichier de sortie.
 FILE* result;
@@ -49,9 +48,8 @@ result = fopen(result_compress,"w");
 while ( !feof(fp) ){
 	
 	//a est le caractère suivant
-	a = fgetchar(fp);
-	
-	sortie = Chercher(dico , prefix = SequenceVersCode(w,wlength) , mono = SequenceVersCode(a,1) );
+	a = fgetc(fp);
+	sortie = Chercher(dico , prefix = SequenceVersCode(w,wlength) , mono = SequenceVersCode(&a,1) );
 	
 	//Si préfixe+mono est présent dans le dictionnaire
 	if ( sortie == -1 ) {
@@ -68,12 +66,12 @@ while ( !feof(fp) ){
 
 	else {
 		//Affichage de l'indice dans le fichier de sortie
-		fprintf(result,sortie);
+		fprintf(result,"%d",sortie);
 		
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
 		if ( !Inserer( dico , prefix , mono) ) {
-			fprintf(result, dico.dict[255].code[0]);
-			Intialiser(dico);
+			fprintf(result, "%d",dico.dict[255].code[0]);
+			Initialiser(dico);
 		
 			}
 		
@@ -85,9 +83,9 @@ while ( !feof(fp) ){
     
 
 //Affichage de l'indice dans le fichier de sortie
-fprintf(result,sortie);
+fprintf(result,"%d",sortie);
 
 //Fin des opérations. Fermeture des fichiers.
 fclose(result);
-fclose(f);
+fclose(fp);
 }
