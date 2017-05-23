@@ -1,6 +1,6 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "dict.h"
 
 void compression(char* f,char* result_compress) {
@@ -43,13 +43,15 @@ w = malloc ( wlength * sizeof (int) ) ;
 //Création et ouverture du fichier de sortie.
 FILE* result;
 result = fopen(result_compress,"w");
-
 //Tant que la fin du fichier n'est pas atteinte :
 while ( !feof(fp) ){
 
 	//a est le caractère suivant
 	a = fgetc(fp);
-	sortie = Chercher(dico , prefix = SequenceVersCode(w,wlength) , mono = SequenceVersCode(&a,1) );
+
+	prefix = SequenceVersCode(w,wlength);
+	mono = SequenceVersCode(&a,1);
+	sortie = Chercher(dico , prefix , mono );
 
 	//Si préfixe+mono est présent dans le dictionnaire
 	if ( sortie == -1 ) {
@@ -79,8 +81,8 @@ while ( !feof(fp) ){
 		*w = a;
 
 		}
-	}
 
+}
 
 //Affichage de l'indice dans le fichier de sortie
 fprintf(result,"%d",sortie);

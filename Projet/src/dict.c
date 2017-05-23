@@ -6,7 +6,9 @@
 
 
 void Initialiser(Dico dico){
+	dico.dict = malloc(NBMAXSEQ*sizeof(int));
 	for(int i=0; i<=256; i++){
+		dico.dict[i].code = malloc(sizeof(int));
 		dico.dict[i].code[0] = i;
 		dico.dict[i].longueur = 1;
 	}
@@ -19,16 +21,16 @@ void Initialiser(Dico dico){
 int Chercher(Dico dico, Code prefixe, Code mono){
 	int i=0, j;
 	int retour = -42;
-	while((i < NBMAXSEQ) && (dico.dict[i].longueur < prefixe.longueur)){
+	while((i < NBMAXSEQ) && (dico.dict[i].longueur < prefixe.longueur) && (dico.dict[i].longueur > 0)){
 		i++;
 	}
-	while((i < NBMAXSEQ) && (retour < 0) && (dico.dict[i].longueur < prefixe.longueur+1)){
+	while((i < NBMAXSEQ) && (retour < 0) && (dico.dict[i].longueur < prefixe.longueur+1) && (dico.dict[i].longueur > 0)){
 		for(j=0; (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j]); j++){}
 		if(j == dico.dict[i].longueur)
 			retour = i;
 	}
 
-	while((i < NBMAXSEQ) && (dico.dict[i].longueur < prefixe.longueur+1)){
+	while((i < NBMAXSEQ) && (dico.dict[i].longueur < prefixe.longueur+1) && (dico.dict[i].longueur > 0)){
 		i++;
 	}
 	while((i < NBMAXSEQ) && (retour >= 0) && (dico.dict[i].longueur < prefixe.longueur+2)){
@@ -36,6 +38,7 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 		if((j == dico.dict[i].longueur) && (dico.dict[i].code[j] == mono.code[0]))
 			retour = -1;
 	}
+		printf("fnezfnoezefezfezf\n");
 
 	return retour;
 }
@@ -108,6 +111,7 @@ void CopyVersCode(Code new_code, int *seq){
 
 Code SequenceVersCode(int *sequence, int longueur){
 	Code new_code;
+	new_code.code = malloc(longueur*sizeof(int));
 	new_code.longueur = longueur;
 	CopyVersCode(new_code, sequence);
 	return new_code;
