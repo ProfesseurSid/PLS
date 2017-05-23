@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include "dict.h"
 
 void compression(char* f,char* result_compress) {
@@ -10,6 +11,8 @@ int a;
 //La longueur du mot courant
 int wlength=1;
 
+int sortie;
+
 //Le dictionnaire
 Dico dico;
 
@@ -19,10 +22,10 @@ Code prefix, mono;
 remove(result_compress);
 
 //Initialisation du dictionnaire
-initialiser(dico);
+Initialiser(dico);
 
 //fp est le fichier d'entrée. Ouverture du fichier d'entrée
-File *fp;
+FILE *fp;
 fp = fopen(f,"r");
 
 //Problème lors de l'ouverture du fichier
@@ -36,19 +39,19 @@ if(fp == NULL) {
 	
 //Allocation d'une case pour stocker le caractère lu
 w = malloc ( wlength * sizeof (int) ) ;
-*w = fgetchar(fp) ;
+*w = fgetchar() ;
 
 //Création et ouverture du fichier de sortie.
-File* result;
+FILE* result;
 result = fopen(result_compress,"w");
 
 //Tant que la fin du fichier n'est pas atteinte : 
 while ( !feof(fp) ){
 	
 	//a est le caractère suivant
-	a = fgetchar(fp)
+	a = fgetchar(fp);
 	
-	sortie = chercher(dico , prefix = SequenceVersCode(w,wlength) , mono = SequenceVersCode(a,1) );
+	sortie = Chercher(dico , prefix = SequenceVersCode(w,wlength) , mono = SequenceVersCode(a,1) );
 	
 	//Si préfixe+mono est présent dans le dictionnaire
 	if ( sortie == -1 ) {
@@ -68,9 +71,9 @@ while ( !feof(fp) ){
 		fprintf(result,sortie);
 		
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
-		if ( !inserer( dico , prefix , mono) ) {
+		if ( !Inserer( dico , prefix , mono) ) {
 			fprintf(result, dico.dict[255].code[0]);
-			intialiser(dico)
+			Intialiser(dico);
 		
 			}
 		
