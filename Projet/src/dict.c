@@ -4,15 +4,6 @@
 
 #define NBMAXSEQ 512
 
-typedef struct{
-	int *code;		// la chaine en question
-	int longueur;	// la longueur de la chaine
-} Code;
-
-typedef struct{
-	Code *dict;
-	int nbseq;
-}Dico;
 
 void Initialiser(Dico dico){
 	for(int i=0; i<=256; i++){
@@ -32,7 +23,7 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 		i++;
 	}
 	while((i < NBMAXSEQ) && (retour < 0) && (dico.dict[i].longueur < prefixe.longueur+1)){
-		for(j=0; (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe[j]); j++){}
+		for(j=0; (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j]); j++){}
 		if(j == dico.dict[i].longueur)
 			retour = i;
 	}
@@ -41,7 +32,7 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 		i++;
 	}
 	while((i < NBMAXSEQ) && (retour >= 0) && (dico.dict[i].longueur < prefixe.longueur+2)){
-		for(j=0; (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe[j]); j++){}
+		for(j=0; (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j]); j++){}
 		if((j == dico.dict[i].longueur) && (dico.dict[i].code[j] == mono.code[0]))
 			retour = -1;
 	}
@@ -50,7 +41,7 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 }
 
 // Fonction de décalage à droite à partir de l'indice
-void Decalage(Dico *dictio, int ind){
+void Decalage(Dico dictio, int ind){
 	int i;
 	for(i=dictio.nbseq - 1; i>= ind; i--) {
 		dictio.dict[i+1] = dictio.dict[i];
@@ -79,19 +70,18 @@ Code Fusion(Code prefixe, Code mono){
 // 0 : Dico remplis de ses NBMAXSEQ valeurs
 // 1 : le code a été rajouté dans le dico
 
-Code Inserer(Dico dictio, Code prefixe, Code mono){
+int Inserer(Dico dictio, Code prefixe, Code mono){
 	int ind;
 	Code fusion;
-	ind = chercher(dictio,prefixe,mono);
+	ind = Chercher(dictio,prefixe,mono);
 	if(ind < 0) {
 		return -1;
 	}
-	else if(ind >= 0) {
+	else {
 		Decalage(dictio, ind);
 		dictio.nbseq++;
 		fusion = Fusion(prefixe,mono);
 		dictio.dict[ind] = fusion;
-		return 1;
 		if(dictio.nbseq < NBMAXSEQ) {
 			return 1;
 		}
@@ -104,7 +94,7 @@ Code Inserer(Dico dictio, Code prefixe, Code mono){
 int *CodeVersChaine(Code code){
 	int *retour;
 	retour = malloc(code.longueur*sizeof(int));
-	for(int i=0; i<longueur; i++)
+	for(int i=0; i<code.longueur; i++)
 		retour[i] = code.code[i];
 	return retour;
 }
@@ -119,7 +109,7 @@ void CopyVersCode(Code new_code, int *seq){
 Code SequenceVersCode(int *sequence, int longueur){
 	Code new_code;
 	new_code.longueur = longueur;
-	CopyversCode(new_code, sequence);
+	CopyVersCode(new_code, sequence);
 	return new_code;
 }
 
