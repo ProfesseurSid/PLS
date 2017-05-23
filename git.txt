@@ -1,12 +1,7 @@
 git add *name*
 git commit -m "J'ai fais tout le boulot je suis trop fénéant"
 git push
-
-
 git pull /** Récep info */
-
-
-
 git config --global user.email "mail@"
 
 
