@@ -5,11 +5,11 @@
 #define NBMAXSEQ 512
 
 void Initialiser(Dico dico){
-	for(int i=0; i<=255; i++){
+	for(int i=0; i<=256; i++){
 		dico.dict[i].code[0] = i;
 		dico.dict[i].longueur = 1;
 	}
-	for(int i=256; i<NBMAXSEQ; i++)
+	for(int i=257; i<NBMAXSEQ; i++)
 		dico.dict[i].longueur = 0;
 }
 
@@ -43,19 +43,19 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 void Decalage(Dico *dictio, int ind){
 	int i;
 	for(i=dictio.nbseq - 1; i>= ind; i--) {
-									dictio.dict[i+1] = dictio.dict[i];
+		dictio.dict[i+1] = dictio.dict[i];
 	}
-	dictio.nbseq++;
 }
 
 // Fusion des deux codes pour former un code : prefixe-mono.
 Code Fusion(Code prefixe, Code mono){
 	int i;
 	Code fusion = malloc(sizeof(Code));
+	fusion.code = malloc((prefixe.longueur+1)*sizeof(int));
 	for(i=0; i<prefixe.longueur; i++) {
-									fusion.code[i] = prefixe.code[i];
+		fusion.code[i] = prefixe.code[i];
 	}
-	fusion.code[i] = mono.code[i];
+	fusion.code[i] = mono.code[0];
 	fusion.longueur = prefixe.longueur + 1;
 	return fusion;
 }
@@ -79,6 +79,7 @@ Code Inserer(Dico *dictio, Code prefixe, Code mono){
 	}
 	else if(ind >= 0) {
 		Decalage(dictio, ind);
+		dictio.nbseq++;
 		fusion = Fusion(prefixe,mono);
 		dictio.dict[ind] = fusion;
 		return 1;
@@ -107,8 +108,16 @@ for(i = 0; i < new_code.longueur; i++){
 }
 
 Code SequenceVersCode(int *sequence, int longueur){
-Code new_code = malloc(sizeof(Code));
+Code new_code;
 new_code.longueur = longueur;
 CopyversCode(new_code, sequence);
 return new_code;
+}
+
+
+int Appartient(Dico dictio, int ind){
+	if(ind<512){
+		return dictio.dict[ind].longueur;
+	}
+	else return -1;
 }

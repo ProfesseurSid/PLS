@@ -19,5 +19,6 @@ Code Inserer(Dico dictio, Code prefixe, Code mono);
 int *CodeVersChaine(Code code);
 void CopyVersCode(Code new_code, int *seq);
 Code SequenceVersCode(int *sequence, int longueur);
+int Appartient(Dico dictio, int ind);
 
 #endif
