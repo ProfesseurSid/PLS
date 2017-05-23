@@ -20,7 +20,7 @@ void decodage (char* fichier,char* sortie){
     for(j=0; j<D[i].longueur; j++)
       w[j] = a[j];
     //fputs(w,s); FONCTION DECRITURE CARAC PAR CARAC
-
+    ecriture(s,w,sizeof(w));
     while (!feof(e)){
       j = fscanf(e,"%c",&j);
       if (j==256){
@@ -38,6 +38,7 @@ void decodage (char* fichier,char* sortie){
         x = concat(D[i].code, D[i].longueur, a, 1);
       }
       // fputs(x,s); FONCTION DECRITURE CARAC PAR CARAC
+      ecriture(s,x,D[i].longueur+1);
       a[0] = x[0];
       Inserer(D,w,a);
       i = j;
@@ -58,4 +59,10 @@ int* concat(int* a, int longa, int* b, int longb){
     c[i] = b[i];
   }
   return c;
+}
+
+void ecriture(File* s,int* c,int longc){
+  for (int i = 0; i<longc; i++){
+    fputc(c[i],s);
+  }
 }
