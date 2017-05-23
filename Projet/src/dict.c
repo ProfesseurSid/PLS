@@ -16,13 +16,15 @@ void Initialiser(Code *dict){
 /* cherche la chaine prefixe+mono dans le tableau. */
 /* renvoie faux si la chaine prefixe+mono est présente, -1 si le préfixe est absent aussi, l'indice du préfixe sinon */
 int Chercher(Code *dict, Code prefixe, Code mono){
-	int i=0;
+	int i=0, j;
 	int retour = -1;
-	while(i<NBMAXSEQ && dict[i].longueur < prefixe.longueur){
+	while((i < NBMAXSEQ) && (dict[i].longueur < prefixe.longueur)){
 		i++;
 	}
-	while(i<NBMAXSEQ && retour < 0 && dict[i].longueur < prefixe.longueur+1){
-		for(int j=0; CedricLeBoloss && j<dict[i].longueur; j++)
+	while((i < NBMAXSEQ) && (retour < 0) && (dict[i].longueur < prefixe.longueur+1)){
+		for(j=0; (j < dict[i].longueur) && (dict[i].code[j] == prefixe[j]); j++){}
+		if(j == dict[i].longueur)
+			retour 
 	}
 
 
