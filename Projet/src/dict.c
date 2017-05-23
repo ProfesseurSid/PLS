@@ -51,7 +51,7 @@ void Decalage(Dico *dictio, int ind){
 // Fusion des deux codes pour former un code : prefixe-mono.
 Code Fusion(Code prefixe, Code mono){
 	int i;
-	Code fusion;
+	Code fusion = malloc(sizeof(Code));
 	for(i=0; i<prefixe.longueur; i++) {
 									fusion.code[i] = prefixe.code[i];
 	}
@@ -72,6 +72,7 @@ Code Fusion(Code prefixe, Code mono){
 Code Inserer(Dico *dictio, Code prefixe, Code mono){
 	int ind;
 	Code fusion;
+	fusion = malloc(sizeof(Code));
 	ind = chercher(dictio,prefixe,mono);
 	if(ind < 0) {
 		return -1;
@@ -98,3 +99,16 @@ int *CodeVersChaine(Code code){
 	return retour;
 }
 
+void CopyVersCode(Code new_code, int *seq){
+int i;
+for(i = 0; i < new_code.longueur; i++){
+	new_code.code[i] = seq[i];
+}
+}
+
+Code SequenceVersCode(int *sequence, int longueur){
+Code new_code = malloc(sizeof(Code));
+new_code.longueur = longueur;
+CopyversCode(new_code, sequence);
+return new_code;
+}
