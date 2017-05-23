@@ -50,7 +50,7 @@ void Decalage(Dico *dictio, int ind){
 // Fusion des deux codes pour former un code : prefixe-mono.
 Code Fusion(Code prefixe, Code mono){
 	int i;
-	Code fusion = malloc(sizeof(Code));
+	Code fusion;
 	fusion.code = malloc((prefixe.longueur+1)*sizeof(int));
 	for(i=0; i<prefixe.longueur; i++) {
 		fusion.code[i] = prefixe.code[i];
@@ -69,10 +69,9 @@ Code Fusion(Code prefixe, Code mono){
 // 0 : Dico remplis de ses NBMAXSEQ valeurs
 // 1 : le code a été rajouté dans le dico
 
-Code Inserer(Dico *dictio, Code prefixe, Code mono){
+Code Inserer(Dico dictio, Code prefixe, Code mono){
 	int ind;
 	Code fusion;
-	fusion = malloc(sizeof(Code));
 	ind = chercher(dictio,prefixe,mono);
 	if(ind < 0) {
 		return -1;
