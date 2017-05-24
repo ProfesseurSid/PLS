@@ -42,7 +42,7 @@ void decodage (char* fichier,char* sortie){
 
     s = fopen(sortie,"w");
     a = malloc(D.dict[i].longueur*sizeof(int));
-    for(j=0; j<D.dict[i].longueur; j++){
+    for(j=0; j<D.dict[i].longueur; j++)
       a[j] = D.dict[i].code[j];
     w = malloc(D.dict[i].longueur*sizeof(int));
     for(j=0; j<D.dict[i].longueur; j++){
@@ -61,7 +61,7 @@ void decodage (char* fichier,char* sortie){
       printf("cherche %d, appart : %i\n", j, Appartient(D,j)>0);
       if (Appartient(D,j)>0){
         x = malloc(D.dict[j].longueur*sizeof(int));
-        for(int k=0; k<D.dict[j].longueur; k++){
+        for(int k=0; k<D.dict[j].longueur; k++)
           x[k] = D.dict[j].code[k];
         ecriture(s,x,D.dict[j].longueur);
         a[0] = x[0];
