@@ -21,7 +21,7 @@ Code prefix, mono;
 remove(result_compress);
 
 //Initialisation du dictionnaire
-Initialiser(dico);
+Initialiser(&dico);
 
 //fp est le fichier d'entrée. Ouverture du fichier d'entrée
 FILE *fp;
@@ -70,9 +70,10 @@ while ( !feof(fp) ){
 		fprintf(result,"%d",sortie);
 		
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
-		if ( !Inserer( dico , prefix , mono) ) {
+			// printf("uiui\n");
+		if ( !Inserer( &dico , prefix , mono) ) {
 			fprintf(result, "%d",dico.dict[255].code[0]);
-			Initialiser(dico);
+			Initialiser(&dico);
 		
 			}
 		
