@@ -4,7 +4,26 @@
 #include "dict.h"
 #include "binaryIO.h"
 
+float Compression_Rate(char * f,char* fsor){
+	float initial_size = 0;
+	
+	FILE * fp;
+	fp = fopen(f,"r");
+	fseek(fp,0L,SEEK_END);
+	initial_size = ftell(fp);
+	fclose(fp);
+	
+	FILE *fs;
+	fs = fopen(fsor,"r");
+	fseek(fs,0L,SEEK_END);
+	initial_size = 100 * (1 - (ftell(fs)/initial_size));
+	fclose(fs);
+	
+	return initial_size;
+}
+
 void compression(char* f,char* result_compress) {
+
 uint8_t sortie_hexa;
 uint32_t tampon = 0;
 int taille = 0;
@@ -34,7 +53,7 @@ fp = fopen(f,"r");
 //Problème lors de l'ouverture du fichier
 if(fp == NULL) {
 
-	puts("Error : file");
+	puts("Error : Couldn't open file");
 	exit(-1);
 
 	}
