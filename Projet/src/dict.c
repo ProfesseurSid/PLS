@@ -39,9 +39,54 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 	return retour;
 }
 
-Code Inserer(Code *dict, Code prefixe, Code mono){
-	if(chercher(prefixe, mono) < -41){
-		/* Insertion d'une fausse ligne tavu */
+// Fonction de décalage à droite à partir de l'indice
+void Decalage(Dico *dictio, int ind){
+	int i;
+	for(i=dictio.nbseq - 1; i>= ind; i--) {
+									dictio.dict[i+1] = dictio.dict[i];
+	}
+	dictio.nbseq++;
+}
+
+// Fusion des deux codes pour former un code : prefixe-mono.
+Code Fusion(Code prefixe, Code mono){
+	int i;
+	Code fusion;
+	for(i=0; i<prefixe.longueur; i++) {
+									fusion.code[i] = prefixe.code[i];
+	}
+	fusion.code[i] = mono.code[i];
+	fusion.longueur = prefixe.longueur + 1;
+	return fusion;
+}
+
+
+//Si <0, on ne peux pas rajouter car soit : préfixe pas présent, ou alors code déjà présent
+//Sinon, on effectue le déplacement + le placement du code au bon endroit
+
+// VALEUR DE RETOUR :
+// -1 : préfixe ou code déjà présent
+// 0 : Dico remplis de ses NBMAXSEQ valeurs
+// 1 : le code a été rajouté dans le dico
+
+Code Inserer(Dico *dictio, Code prefixe, Code mono){
+	int ind;
+	Code fusion;
+	ind = chercher(dictio,prefixe,mono);
+	if(ind < 0) {
+		return -1;
+	}
+	else if(ind >= 0) {
+		Decalage(dictio, ind);
+		fusion = Fusion(prefixe,mono);
+		dictio.dict[ind] = fusion;
+		return 1;
+		if(dictio.nbseq < NBMAXSEQ) {
+			return 1;
+		}
+		else{
+			return 0;
+		}
 	}
 }
 
@@ -49,5 +94,4 @@ int *CodeVersChaine(Code code){
 	int *retour;
 	retour = malloc(code.longueur*sizeof(int));
 
-	
 }
