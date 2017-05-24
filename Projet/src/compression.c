@@ -5,6 +5,9 @@
 
 void compression(char* f,char* result_compress) {
 
+// uint32_t tampon = 0;
+// int taille = 0;
+// int nb_bits = 0;
 int* w;
 int a;
 //La longueur du mot courant
@@ -50,7 +53,7 @@ while ( !feof(fp) ){
 	a = fgetc(fp);
 	prefix = SequenceVersCode(w,wlength);
 	mono = SequenceVersCode(&a,1);
-	printf("recherche : %c, taille : %i, tailleprefix : %i, taillemono : %i\n", w[0], wlength, prefix.longueur, mono.longueur);
+	// printf("recherche : %c, taille : %i, tailleprefix : %i, taillemono : %i\n", w[0], wlength, prefix.longueur, mono.longueur);            // TRACE
 	sortie = Chercher(dico , prefix , mono );
 
 	//Si préfixe+mono est présent dans le dictionnaire
@@ -65,7 +68,7 @@ while ( !feof(fp) ){
 		temp[wlength] = a;
 		wlength++;
 		w = temp;
-		printf("on augmente\n");
+		// printf("on augmente\n");     // TRACE
 		// free(temp);
 
 	}
@@ -80,7 +83,7 @@ while ( !feof(fp) ){
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
 			// printf("uiui\n");
 		if ( !Inserer( &dico , prefix , mono) ) {
-			fprintf(result, "%d\n",dico.dict[255].code[0]);
+			fprintf(result, "%d\n",dico.dict[256].code[0]);
 			Initialiser(&dico);
 		}
 

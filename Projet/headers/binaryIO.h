@@ -1,6 +1,7 @@
 #ifndef BINARY_IO
 #define BINARY_IO
 
+#include <stdint.h>
 
 // Calcul le nombre de bit nécessaire pour coder ind
 int Taille(int ind);

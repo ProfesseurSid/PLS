@@ -93,7 +93,7 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 		}
 		i++;
 	}
-	printf("retour : %i\n", retour);
+	// printf("retour : %i\n", retour);   // TRACE
 	return retour;
 }
 
