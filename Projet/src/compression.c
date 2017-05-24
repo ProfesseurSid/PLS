@@ -88,12 +88,16 @@ while ( !feof(fp) ){
 			taille -= 8;
 			// printf("\nTaille restante : %d\n", taille	);
 			printf("%x ", sortie_hexa);
-			printf("\n\n On passe dans le > 32\n");
+			// printf("\n\n On passe dans le > 32\n");
 		}
 		else{
 			// printf("\nTaille restante : %d\n", taille	);
 			Ajout(sortie, &tampon, nb_bits);
-			taille += nb_bits;
+			if(nb_bits < 9){
+				taille += 9;
+			}
+			else
+				taille += nb_bits;
 		}
 
 //		//_____________________________________________________________________---
@@ -119,17 +123,18 @@ while ( !feof(fp) ){
 
 //Affichage de l'indice dans le fichier de sortie  uint8_t Retrait(uint32_t *tampon, int taille_act){   void Ajout(int ind, uint32_t *tampon, int taille){
 fprintf(result,"%d",sortie);
-printf("Valeur du tampon avant vidage : %x \n",tampon);
-while(taille > 8){
+// printf("Valeur du tampon avant vidage : %x \n",tampon);
+// printf("\nTaille restante : %d\n", taille	);
+while(taille >= 8){
 	sortie_hexa = Retrait(&tampon, taille);
-	taille -= 8;
-	printf("\nTaille restante : %d\n", taille	);
+	taille = taille - 8;
+	// printf("\nTaille restante : %d\n", taille	);
 	printf("%x ", sortie_hexa);
 }
 sortie_hexa = Completion(&tampon, taille);
-printf("%x ", sortie_hexa);
-taille -= 8;
-printf("Taille restante : %d\n", taille	);
+// printf("%x ", sortie_hexa);
+taille = taille - 8;
+// printf("Taille restante : %d\n", taille	);
 //Fin des opérations. Fermeture des fichiers.
 fclose(result);
 fclose(fp);
