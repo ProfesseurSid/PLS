@@ -50,7 +50,7 @@ while ( !feof(fp) ){
 	a = fgetc(fp);
 	prefix = SequenceVersCode(w,wlength);
 	mono = SequenceVersCode(&a,1);
-	printf("recherche : %c, taille : %i\n, tailleprefix : %i, taillemono : %i\n", w[0], wlength, prefix.longueur, mono.longueur);
+	printf("recherche : %c, taille : %i, tailleprefix : %i, taillemono : %i\n", w[0], wlength, prefix.longueur, mono.longueur);
 	sortie = Chercher(dico , prefix , mono );
 
 	//Si préfixe+mono est présent dans le dictionnaire
@@ -72,8 +72,10 @@ while ( !feof(fp) ){
 
 	else {
 		//Affichage de l'indice dans le fichier de sortie
-		fprintf(result,"%d",sortie);
-		fprintf(result," ");
+
+		fprintf(result,"%d ",sortie);
+		// fprintf(result," ");
+
 
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
 			// printf("uiui\n");
