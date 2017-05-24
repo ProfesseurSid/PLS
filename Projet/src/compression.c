@@ -61,26 +61,26 @@ while ( !feof(fp) ){
 		memcpy(temp,w,wlength-1);
 		*( temp + wlength-1 ) = a;
 		w = temp;
-		free(temp);
+		// free(temp);
 
-		}
+	}
 
 	else {
+		wlength = 1;
 		//Affichage de l'indice dans le fichier de sortie
 		fprintf(result,"%d",sortie);
 		
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
 			// printf("uiui\n");
+		printf("coucou\n");
 		if ( !Inserer( &dico , prefix , mono) ) {
 			fprintf(result, "%d",dico.dict[255].code[0]);
 			Initialiser(&dico);
-		
-			}
+		}
 		
 		//On replace w sur le dernier caractère lu
-		*w = a;
-
-		}
+		w[0] = a;
+	}
 }
     
 

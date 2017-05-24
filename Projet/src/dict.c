@@ -53,16 +53,16 @@ void Decalage(Dico *dictio, int ind){
 }
 
 // Fusion des deux codes pour former un code : prefixe-mono.
-Code Fusion(Code prefixe, Code mono){
+void Fusion(Code prefixe, Code mono, Code *retour){
 	int i;
-	Code fusion;
-	fusion.code = malloc((prefixe.longueur+1)*sizeof(int));
+	// Code fusion;
+	retour->code = malloc((prefixe.longueur+1)*sizeof(int));
 	for(i=0; i<prefixe.longueur; i++) {
-		fusion.code[i] = prefixe.code[i];
+		retour->code[i] = prefixe.code[i];
 	}
-	fusion.code[i] = mono.code[0];
-	fusion.longueur = prefixe.longueur + 1;
-	return fusion;
+	retour->code[i] = mono.code[0];
+	retour->longueur = prefixe.longueur + 1;
+
 }
 
 
@@ -79,13 +79,14 @@ int Inserer(Dico *dictio, Code prefixe, Code mono){
 	Code fusion;
 	ind = Chercher(*dictio,prefixe,mono);
 	if(ind < 0) {
+		printf("uiui\n");
 		return -1;
 	}
 	else {
 		printf("okok\n");
 		Decalage(dictio, ind);
 		dictio->nbseq++;
-		fusion = Fusion(prefixe,mono);
+		Fusion(prefixe,mono,&fusion);
 		dictio->dict[ind] = fusion;
 		if(dictio->nbseq < NBMAXSEQ) {
 			return 1;

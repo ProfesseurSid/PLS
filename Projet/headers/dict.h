@@ -13,7 +13,7 @@ typedef struct{
 
 void Initialiser(Dico *dico);
 void Decalage(Dico *dictio, int ind);
-Code Fusion(Code prefixe, Code mono);
+void Fusion(Code prefixe, Code mono, Code *retour);
 int Chercher(Dico dico, Code prefixe, Code mono);
 int Inserer(Dico *dictio, Code prefixe, Code mono);
 int *CodeVersChaine(Code code);
