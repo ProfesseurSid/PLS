@@ -128,7 +128,7 @@ void Fusion(Code prefixe, Code mono, Code *retour){
 // 1 : le code a été rajouté dans le dico
 
 
-// Changer pour renvoie code peut être. 
+// Changer pour renvoie code peut être.
 int Inserer(Dico *dictio, Code prefixe, Code mono){
 	// int ind;
 	Code fusion;
