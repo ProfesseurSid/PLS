@@ -25,6 +25,7 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 		i++;
 	}
 	while((i < NBMAXSEQ) && (retour < 0) && (dico.dict[i].longueur < prefixe.longueur+1) && (dico.dict[i].longueur > 0)){
+		printf("%d\n", i);
 		for(j=0; (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j]); j++){}
 		if(j == dico.dict[i].longueur)
 			retour = i;
@@ -38,7 +39,6 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 		if((j == dico.dict[i].longueur) && (dico.dict[i].code[j] == mono.code[0]))
 			retour = -1;
 	}
-		printf("fnezfnoezefezfezf\n");
 
 	return retour;
 }
