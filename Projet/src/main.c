@@ -16,7 +16,9 @@ int main(int argc, char *argv[]){
 			switch(argv[1][1]){
 				case('h'):
 					printf("NAME\n\tLZW compressor - file compressor using lzw algorithm\n");
-					printf("\nSYNOPSIS\n\t lzw [-cd] [val [...]]\n");
+
+					printf("\nSYNOPSIS\n\tlzw [-cd] [val [...]]\n");
+
 					printf("\nLISTING OPTIONS\n\t-c\tCompresses the given file(s).\n\t\tCompressed file is <file name>.lzw.\n\t-d\tDecompresses the given file(s).\n\t\tFiles MUST be files compressed with .lzw extension.\n\t\tOtherwise, does not even try.\n\t-h\tDisplays this help.\n");
 					//HELP = 1;
 					break;

@@ -5,63 +5,64 @@
 #define NBMAXSEQ 512
 
 
-void Initialiser(Dico dico){
-	dico.dict = malloc(NBMAXSEQ*sizeof(int));
+void Initialiser(Dico *dico){
+	dico->dict = malloc(NBMAXSEQ*sizeof(int));
 	for(int i=0; i<=256; i++){
-		dico.dict[i].code = malloc(sizeof(int));
-		dico.dict[i].code[0] = i;
-		dico.dict[i].longueur = 1;
+		dico->dict[i].code = malloc(sizeof(int));
+		dico->dict[i].code[0] = i;
+		dico->dict[i].longueur = 1;
 	}
 	for(int i=257; i<NBMAXSEQ; i++)
-		dico.dict[i].longueur = 0;
+		dico->dict[i].longueur = 0;
 }
 
 /* cherche la chaine prefixe+mono dans le tableau. */
 /* renvoie -1 si la chaine prefixe+mono est présente, -42 si le préfixe est absent aussi, l'indice du préfixe sinon */
 int Chercher(Dico dico, Code prefixe, Code mono){
 	int i=0, j;
-	int retour = -42;
+	int retour = -10;
 	while((i < NBMAXSEQ) && (dico.dict[i].longueur < prefixe.longueur) && (dico.dict[i].longueur > 0)){
 		i++;
 	}
 	while((i < NBMAXSEQ) && (retour < 0) && (dico.dict[i].longueur < prefixe.longueur+1) && (dico.dict[i].longueur > 0)){
-		printf("%d\n", i);
 		for(j=0; (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j]); j++){}
 		if(j == dico.dict[i].longueur)
 			retour = i;
+		i++;
 	}
 
 	while((i < NBMAXSEQ) && (dico.dict[i].longueur < prefixe.longueur+1) && (dico.dict[i].longueur > 0)){
 		i++;
 	}
-	while((i < NBMAXSEQ) && (retour >= 0) && (dico.dict[i].longueur < prefixe.longueur+2)){
+	while((i < NBMAXSEQ) && (retour >= 0) && (dico.dict[i].longueur < prefixe.longueur+2) && (dico.dict[i].longueur > 0)){
 		for(j=0; (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j]); j++){}
 		if((j == dico.dict[i].longueur) && (dico.dict[i].code[j] == mono.code[0]))
 			retour = -1;
+		i++;
 	}
 
 	return retour;
 }
 
 // Fonction de décalage à droite à partir de l'indice
-void Decalage(Dico dictio, int ind){
+void Decalage(Dico *dictio, int ind){
 	int i;
-	for(i=dictio.nbseq - 1; i>= ind; i--) {
-		dictio.dict[i+1] = dictio.dict[i];
+	for(i=dictio->nbseq - 1; i >= ind; i--) {
+		dictio->dict[i+1] = dictio->dict[i];
 	}
 }
 
 // Fusion des deux codes pour former un code : prefixe-mono.
-Code Fusion(Code prefixe, Code mono){
+void Fusion(Code prefixe, Code mono, Code *retour){
 	int i;
-	Code fusion;
-	fusion.code = malloc((prefixe.longueur+1)*sizeof(int));
+	// Code fusion;
+	retour->code = malloc((prefixe.longueur+1)*sizeof(int));
 	for(i=0; i<prefixe.longueur; i++) {
-		fusion.code[i] = prefixe.code[i];
+		retour->code[i] = prefixe.code[i];
 	}
-	fusion.code[i] = mono.code[0];
-	fusion.longueur = prefixe.longueur + 1;
-	return fusion;
+	retour->code[i] = mono.code[0];
+	retour->longueur = prefixe.longueur + 1;
+
 }
 
 
@@ -73,19 +74,21 @@ Code Fusion(Code prefixe, Code mono){
 // 0 : Dico remplis de ses NBMAXSEQ valeurs
 // 1 : le code a été rajouté dans le dico
 
-int Inserer(Dico dictio, Code prefixe, Code mono){
+int Inserer(Dico *dictio, Code prefixe, Code mono){
 	int ind;
 	Code fusion;
-	ind = Chercher(dictio,prefixe,mono);
+	ind = Chercher(*dictio,prefixe,mono);
 	if(ind < 0) {
+		printf("uiui\n");
 		return -1;
 	}
 	else {
+		printf("okok\n");
 		Decalage(dictio, ind);
-		dictio.nbseq++;
-		fusion = Fusion(prefixe,mono);
-		dictio.dict[ind] = fusion;
-		if(dictio.nbseq < NBMAXSEQ) {
+		dictio->nbseq++;
+		Fusion(prefixe,mono,&fusion);
+		dictio->dict[ind] = fusion;
+		if(dictio->nbseq < NBMAXSEQ) {
 			return 1;
 		}
 		else{

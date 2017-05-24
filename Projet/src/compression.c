@@ -21,7 +21,7 @@ Code prefix, mono;
 remove(result_compress);
 
 //Initialisation du dictionnaire
-Initialiser(dico);
+Initialiser(&dico);
 
 //fp est le fichier d'entrée. Ouverture du fichier d'entrée
 FILE *fp;
@@ -62,25 +62,27 @@ while ( !feof(fp) ){
 		memcpy(temp,w,wlength-1);
 		*( temp + wlength-1 ) = a;
 		w = temp;
-		free(temp);
+		// free(temp);
 
-		}
+	}
 
 	else {
+		wlength = 1;
 		//Affichage de l'indice dans le fichier de sortie
 		fprintf(result,"%d",sortie);
 
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
-		if ( !Inserer( dico , prefix , mono) ) {
+		printf("uiui\n");
+		printf("coucoaaaaaaaaaaaaaaaaaaaaaaaaaaaau\n");
+		if ( !Inserer( &dico , prefix , mono) ) {
 			fprintf(result, "%d",dico.dict[255].code[0]);
-			Initialiser(dico);
 
-			}
+			Initialiser(&dico);
+		}
 
 		//On replace w sur le dernier caractère lu
-		*w = a;
-
-		}
+		w[0] = a;
+	}
 
 }
 

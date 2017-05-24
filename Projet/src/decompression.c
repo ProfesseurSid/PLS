@@ -27,7 +27,7 @@ void decodage (char* fichier,char* sortie){
   Code ac;
   Code wc;
   Dico D;
-  Initialiser(D);
+  Initialiser(&D);
   int* w,*x,*a;
   FILE *e = NULL;
   FILE *s = NULL;
@@ -47,7 +47,7 @@ void decodage (char* fichier,char* sortie){
 
       fscanf(e,"%d",&j);
       if (j==256){
-          Initialiser(D);
+          Initialiser(&D);
           fscanf(e,"%d",&j);
       }
       if (Appartient(D,j)>0){
@@ -65,7 +65,7 @@ void decodage (char* fichier,char* sortie){
       a[0] = x[0];
       ac = SequenceVersCode(a,1);
       wc = SequenceVersCode(w,D.dict[j].longueur);
-      Inserer(D,wc,ac);
+      Inserer(&D,wc,ac);
       i = j;
       for(int k=0; i<D.dict[i].longueur; k++)
         w[k] = D.dict[i].code[k];
