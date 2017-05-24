@@ -6,9 +6,10 @@ typedef struct{
 	int longueur;	// la longueur de la chaine
 } Code;
 
-void Initialiser(Code *dict);
-Code Inserer(Code *dict, Code prefixe, Code mono);
-uint8_t *CodeVersChaine(Code code, int *longueur);
+void Initialiser(Dico dict);
+int Chercher(Dico dico, Code prefixe, Code mono);
+Code Inserer(Dico dict, Code prefixe, Code mono);
+int *CodeVersChaine(Code code);
 Code SequenceVersCode(uint8_t *sequence, int longueur);
 
 #endif
