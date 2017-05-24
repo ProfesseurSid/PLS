@@ -62,7 +62,7 @@ void lire_fichier(FILE *f, char langue)
 	coup_t *QueueListeDeCoups = NULL;
 	echiquier_t plateau;
 	affiche_func_param_t sortie;
-	
+
 	init(plateau);
 	afficher_plateau(plateau, sortie, langue);
 
@@ -155,7 +155,7 @@ int main(int argc, char *argv[]){
 					}
 					break;
 				case('l'):
-					langue = argv[4][0];	
+					langue = argv[4][0];
 			}
 		}
 	}

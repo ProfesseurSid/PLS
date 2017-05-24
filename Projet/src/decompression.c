@@ -8,12 +8,16 @@
 
 int* concat(int* a, int longa, int* b, int longb){
   int* c = malloc((longa+longb)*sizeof(int));
+  printf("\n\nTRACE\n");
   for (int i = 0; i < longa; i++){
+    printf("%d - ", a[i]);
     c[i] = a[i];
   }
   for (int i = 0; i < longb; i++) {
+      printf("%d - ", b[i]);
     c[i+longa] = b[i];
   }
+  printf("\n\n");
   return c;
 }
 
@@ -36,15 +40,17 @@ void decodage (char* fichier,char* sortie){
     fscanf(e,"%d",&i);
     s = fopen(sortie,"w");
     a = malloc(D.dict[i].longueur*sizeof(int));
-    for(j=0; j<D.dict[i].longueur; j++)
+    for(j=0; j<D.dict[i].longueur; j++){
       a[j] = D.dict[i].code[j];
+    }
     w = malloc(D.dict[i].longueur*sizeof(int));
-    for(j=0; j<D.dict[i].longueur; j++)
+    for(j=0; j<D.dict[i].longueur; j++){
+
       w[j] = a[j];
+    }
     //fputs(w,s); FONCTION DECRITURE CARAC PAR CARAC
     ecriture(s,w,D.dict[i].longueur);
     while (!feof(e)){
-
       fscanf(e,"%d",&j);
       if (j==256){
           Initialiser(&D);
@@ -52,8 +58,9 @@ void decodage (char* fichier,char* sortie){
       }
       if (Appartient(D,j)>0){
         x = malloc(D.dict[j].longueur*sizeof(int));
-        for(int k=0; k<D.dict[j].longueur; k++)
+        for(int k=0; k<D.dict[j].longueur; k++){
           x[k] = D.dict[j].code[k];
+        }
       }else{
         // x = malloc((D.dict[i].longueur+1)*sizeof(int));
         // for(int k=0; k<D.dict[i].longueur; k++)
@@ -65,9 +72,14 @@ void decodage (char* fichier,char* sortie){
       a[0] = x[0];
       ac = SequenceVersCode(a,1);
       wc = SequenceVersCode(w,D.dict[i].longueur);
+// TEST ZONE
+    //   for(int z=0; z<D.dict[259].longueur;z++){
+    //   printf("%d = %d\n\n",z, D.dict[259].code[z]);
+    // }
+//
       Inserer(&D,wc,ac);
       i = j;
-      for(int k=0; i<D.dict[i].longueur; k++)
+      for(int k=0; k<D.dict[i].longueur; k++)
         w[k] = D.dict[i].code[k];
     }
     fclose(e);
