@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "dict.h"
+#include "binaryIO.h"
 
 void compression(char* f,char* result_compress) {
-
-// uint32_t tampon = 0;
-// int taille = 0;
-// int nb_bits = 0;
+uint8_t sortie_hexa;
+uint32_t tampon = 0;
+int taille = 0;
+int nb_bits = 0;
 int* w;
 int a;
 //La longueur du mot courant
@@ -76,6 +77,27 @@ while ( !feof(fp) ){
 	else {
 		//Affichage de l'indice dans le fichier de sortie
 
+//		// TEST DE BINARYIO ___________________________________________________---
+
+		nb_bits = Taille(sortie);
+		// printf("\nTaille restante aa: %d\n", taille	);
+		// printf("\nNb_bits taille : %d\n", nb_bits);
+		if(taille + nb_bits > 32){
+			// printf("\nTaille restante : %d\n", taille	);
+			sortie_hexa = Retrait(&tampon, taille);
+			taille -= 8;
+			// printf("\nTaille restante : %d\n", taille	);
+			printf("%x ", sortie_hexa);
+			printf("\n\n On passe dans le > 32\n");
+		}
+		else{
+			// printf("\nTaille restante : %d\n", taille	);
+			Ajout(sortie, &tampon, nb_bits);
+			taille += nb_bits;
+		}
+
+//		//_____________________________________________________________________---
+
 		fprintf(result,"%d ",sortie);
 		// fprintf(result," ");
 
@@ -95,9 +117,19 @@ while ( !feof(fp) ){
 }
 
 
-//Affichage de l'indice dans le fichier de sortie
+//Affichage de l'indice dans le fichier de sortie  uint8_t Retrait(uint32_t *tampon, int taille_act){   void Ajout(int ind, uint32_t *tampon, int taille){
 fprintf(result,"%d",sortie);
-
+printf("Valeur du tampon avant vidage : %x \n",tampon);
+while(taille > 8){
+	sortie_hexa = Retrait(&tampon, taille);
+	taille -= 8;
+	printf("\nTaille restante : %d\n", taille	);
+	printf("%x ", sortie_hexa);
+}
+sortie_hexa = Completion(&tampon, taille);
+printf("%x ", sortie_hexa);
+taille -= 8;
+printf("Taille restante : %d\n", taille	);
 //Fin des opérations. Fermeture des fichiers.
 fclose(result);
 fclose(fp);

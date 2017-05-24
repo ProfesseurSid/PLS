@@ -26,3 +26,12 @@ uint8_t Retrait(uint32_t *tampon, int taille_act){
   *tampon = *tampon & ~(valeur << (taille_act - 8));
   return valeur;
 }
+
+
+// Complétion puis affichage
+uint8_t Completion(uint32_t *tampon, int taille_act){
+  uint8_t valeur;
+  printf("\n ---- Padding : %d \n", 8 - taille_act);
+  valeur = *tampon << (8 - taille_act);
+  return valeur;
+}
