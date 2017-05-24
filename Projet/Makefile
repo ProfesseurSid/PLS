@@ -12,7 +12,7 @@ all: $(EXE)
 
 ## REGLES DE COMPILATION ##
 $(EXE): $(OBJS)
-	$(CC) -o bin/chess $(OBJS) $(CFLAGS)
+	$(CC) -o bin/lzw $(OBJS) $(CFLAGS)
 
 #.c.o:
 #	$(CC) -o $@ -c $< $(CFLAGS)
