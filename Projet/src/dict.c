@@ -108,8 +108,16 @@ for(i = 0; i < new_code.longueur; i++){
 }
 
 Code SequenceVersCode(int *sequence, int longueur){
-Code new_code = malloc(sizeof(Code));
+Code new_code;
 new_code.longueur = longueur;
 CopyversCode(new_code, sequence);
 return new_code;
+}
+
+
+int Appartient(Dico dictio, int ind){
+	if(ind<512){
+		return dictio.dict[ind].longueur;
+	}
+	else return -1;
 }
