@@ -79,7 +79,7 @@ Code Fusion(Code prefixe, Code mono){
 // 0 : Dico remplis de ses NBMAXSEQ valeurs
 // 1 : le code a été rajouté dans le dico
 
-Code Inserer(Dico *dictio, Code prefixe, Code mono){
+Code Inserer(Dico dictio, Code prefixe, Code mono){
 	int ind;
 	Code fusion;
 	ind = chercher(dictio,prefixe,mono);
