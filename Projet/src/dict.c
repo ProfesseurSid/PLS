@@ -93,5 +93,8 @@ Code Inserer(Dico *dictio, Code prefixe, Code mono){
 int *CodeVersChaine(Code code){
 	int *retour;
 	retour = malloc(code.longueur*sizeof(int));
-
+	for(int i=0; i<longueur; i++)
+		retour[i] = code.code[i];
+	return retour;
 }
+
