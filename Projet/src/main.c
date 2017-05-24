@@ -108,8 +108,8 @@ int main(int argc, char *argv[]){
 
 					for(int i=2; i<argc-2; i++){
 						char *sortie;
-						length = strlen(argv[i]);
-						sortie = malloc((length+5)*sizeof(char))
+						int length = strlen(argv[i]);
+						sortie = malloc((length+5)*sizeof(char));
 						strcpy(sortie, argv[i]);
 						sortie[length] = '.';
 						sortie[length+1] = 'l';
@@ -126,10 +126,10 @@ int main(int argc, char *argv[]){
 
 					for(int i=2; i<argc-2; i++){
 						char *sortie;
-						length = strlen(argv[i]);
-						sortie = malloc((length)*sizeof(char))
+						int length = strlen(argv[i]);
+						sortie = malloc((length)*sizeof(char));
 						strcpy(sortie, argv[i]);
-						if(sortie[length-4] == '.' && sortie[length-3] == 'l' && sortie[length-2] == 'z' && sortie[length-1] = 'w'){
+						if(sortie[length-4] == '.' && sortie[length-3] == 'l' && sortie[length-2] == 'z' && sortie[length-1] == 'w'){
 							sortie[length-4] = 0;
 							decodage(argv[i],sortie);
 						}
