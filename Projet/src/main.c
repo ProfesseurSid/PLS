@@ -93,7 +93,7 @@ int main(int argc, char *argv[]){
 				case('h'):
 					printf("NAME\n\tLZW compressor - file compressor using lzw algorithm\n");
 					printf("\nSYNOPSIS\n\tchess [-cd] [val [...]]\n");
-					printf("\nLISTING OPTIONS\n\t-c\tCompresses the given file(s).\n\t\tCompressed file is <file name>.lzw.\n\t-d\tDecompresses the given file(s).\n\t\tFiles MUST be files compressed with .lzw extension. Otherwise, does not even try.\n\t-h\tDisplays this help.\n");
+					printf("\nLISTING OPTIONS\n\t-c\tCompresses the given file(s).\n\t\tCompressed file is <file name>.lzw.\n\t-d\tDecompresses the given file(s).\n\t\tFiles MUST be files compressed with .lzw extension.\n\t\tOtherwise, does not even try.\n\t-h\tDisplays this help.\n");
 					//HELP = 1;
 					break;
 				case('c'):
@@ -106,7 +106,7 @@ int main(int argc, char *argv[]){
 					if(argc < 3)
 						printf("Give one or more file(s) to compress\n");
 
-					for(int i=2; i<argc-2; i++){
+					for(int i=2; i<argc; i++){
 						char *sortie;
 						int length = strlen(argv[i]);
 						sortie = malloc((length+5)*sizeof(char));
@@ -124,7 +124,7 @@ int main(int argc, char *argv[]){
 					if(argc < 3)
 						printf("Give one or more file(s) to decompress\n");
 
-					for(int i=2; i<argc-2; i++){
+					for(int i=2; i<argc; i++){
 						char *sortie;
 						int length = strlen(argv[i]);
 						sortie = malloc((length)*sizeof(char));
