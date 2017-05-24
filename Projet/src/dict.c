@@ -24,7 +24,6 @@ void Initialiser(Dico *dico){
 /* cherche la chaine prefixe+mono dans le tableau. */
 /* renvoie -1 si la chaine prefixe+mono est présente, -42 si le préfixe est absent aussi, l'indice du préfixe sinon */
 int Chercher(Dico dico, Code prefixe, Code mono){
-
 	int i=0;
 	int retour = -42;
 	// while((i < NBMAXSEQ) && (dico.dict[i].longueur < prefixe.longueur) && (dico.dict[i].longueur > 0)){

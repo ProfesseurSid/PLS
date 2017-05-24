@@ -1,6 +1,6 @@
 #include "dict.h"
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 
@@ -11,8 +11,8 @@ int* concat(int* a, int longa, int* b, int longb){
   for (int i = 0; i < longa; i++){
     c[i] = a[i];
   }
-  for (int i = longa; i < longa+longb; i++) {
-    c[i] = b[i];
+  for (int i = 0; i < longb; i++) {
+    c[i+longa] = b[i];
   }
   return c;
 }
@@ -28,7 +28,7 @@ void decodage (char* fichier,char* sortie){
   Code wc;
   Dico D;
   Initialiser(&D);
-  int* w,*x,*a;
+  int* w, *x, *a;
   FILE *e = NULL;
   FILE *s = NULL;
   e = fopen(fichier, "r");
@@ -38,11 +38,11 @@ void decodage (char* fichier,char* sortie){
     a = malloc(D.dict[i].longueur*sizeof(int));
     for(j=0; j<D.dict[i].longueur; j++)
       a[j] = D.dict[i].code[j];
-    w = malloc(sizeof(a));
+    w = malloc(D.dict[i].longueur*sizeof(int));
     for(j=0; j<D.dict[i].longueur; j++)
       w[j] = a[j];
     //fputs(w,s); FONCTION DECRITURE CARAC PAR CARAC
-    ecriture(s,w,sizeof(w));
+    ecriture(s,w,D.dict[i].longueur);
     while (!feof(e)){
 
       fscanf(e,"%d",&j);
@@ -64,7 +64,7 @@ void decodage (char* fichier,char* sortie){
       ecriture(s,x,D.dict[i].longueur+1);
       a[0] = x[0];
       ac = SequenceVersCode(a,1);
-      wc = SequenceVersCode(w,D.dict[j].longueur);
+      wc = SequenceVersCode(w,D.dict[i].longueur);
       Inserer(&D,wc,ac);
       i = j;
       for(int k=0; i<D.dict[i].longueur; k++)

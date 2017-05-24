@@ -32,10 +32,10 @@ if(fp == NULL) {
 
 	puts("Error : file");
 	exit(-1);
-
+	
 	}
-
-
+	
+	
 //Allocation d'une case pour stocker le caractère lu
 w = malloc ( wlength * sizeof (int) ) ;
 *w = fgetc(fp) ;
@@ -43,20 +43,19 @@ w = malloc ( wlength * sizeof (int) ) ;
 //Création et ouverture du fichier de sortie.
 FILE* result;
 result = fopen(result_compress,"w");
-//Tant que la fin du fichier n'est pas atteinte :
+//Tant que la fin du fichier n'est pas atteinte : 
 while ( !feof(fp) ){
-
+	
 	//a est le caractère suivant
 	a = fgetc(fp);
-
 	prefix = SequenceVersCode(w,wlength);
 	mono = SequenceVersCode(&a,1);
 	printf("recherche : %c, taille : %i\n, tailleprefix : %i, taillemono : %i\n", w[0], wlength, prefix.longueur, mono.longueur);
 	sortie = Chercher(dico , prefix , mono );
-
+	
 	//Si préfixe+mono est présent dans le dictionnaire
 	if ( sortie == -1 ) {
-
+		
 		//On ralonge le préfixe.
 		int* temp = malloc((wlength+1)*sizeof(int));
 		// memcpy(temp,w,wlength-1);
@@ -74,26 +73,25 @@ while ( !feof(fp) ){
 	else {
 		//Affichage de l'indice dans le fichier de sortie
 		fprintf(result,"%d",sortie);
-
+		fprintf(result," ");
+		
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
-
 			// printf("uiui\n");
 		if ( !Inserer( &dico , prefix , mono) ) {
 			fprintf(result, "%d\n",dico.dict[255].code[0]);
 			Initialiser(&dico);
 		}
-
+		
 		//On replace w sur le dernier caractère lu
 		wlength = 1;
 		w = malloc ( wlength * sizeof (int) ) ;
 		w[0] = a;
 	}
-
 }
+    
 
 //Affichage de l'indice dans le fichier de sortie
 fprintf(result,"%d",sortie);
-fprintf(result," ");
 
 //Fin des opérations. Fermeture des fichiers.
 fclose(result);
