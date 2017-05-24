@@ -1,7 +1,15 @@
+###									            ###
+#  Project : C pour la programmation système : Compression décompression sans perte   #
+ ##										    ##
+#  Authors : CHANET Zoran & EZ-ZINE Najwa & LAFRASSE Cédric & MANEVAL Thibaud 	      #
+ ##										    ##
+#  Date : 30/05/2017								      #
+###										    ###
+
+
 ## DEFINITION DES VARIABLES ##
 EXE=lzw
 CC=gcc
-# CFLAGS=-g -Ithe_headers -lvt100 -L../../lib/ -Wall -Werror 
 CFLAGS=-g -Iheaders -Wall -Werror
 
 SRCS=src/*
