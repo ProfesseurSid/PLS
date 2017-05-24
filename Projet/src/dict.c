@@ -4,6 +4,16 @@
 
 #define NBMAXSEQ 512
 
+typedef struct{
+	int *code;		// la chaine en question
+	int longueur;	// la longueur de la chaine
+} Code;
+
+typedef struct{
+	Code *dict;
+	int nbseq;
+}Dico;
+
 void Initialiser(Dico dico){
 	for(int i=0; i<=256; i++){
 		dico.dict[i].code[0] = i;
@@ -50,7 +60,7 @@ void Decalage(Dico *dictio, int ind){
 // Fusion des deux codes pour former un code : prefixe-mono.
 Code Fusion(Code prefixe, Code mono){
 	int i;
-	Code fusion = malloc(sizeof(Code));
+	Code fusion;
 	fusion.code = malloc((prefixe.longueur+1)*sizeof(int));
 	for(i=0; i<prefixe.longueur; i++) {
 		fusion.code[i] = prefixe.code[i];
@@ -72,7 +82,6 @@ Code Fusion(Code prefixe, Code mono){
 Code Inserer(Dico *dictio, Code prefixe, Code mono){
 	int ind;
 	Code fusion;
-	fusion = malloc(sizeof(Code));
 	ind = chercher(dictio,prefixe,mono);
 	if(ind < 0) {
 		return -1;
@@ -101,17 +110,17 @@ int *CodeVersChaine(Code code){
 }
 
 void CopyVersCode(Code new_code, int *seq){
-int i;
-for(i = 0; i < new_code.longueur; i++){
-	new_code.code[i] = seq[i];
-}
+	int i;
+	for(i = 0; i < new_code.longueur; i++){
+		new_code.code[i] = seq[i];
+	}
 }
 
 Code SequenceVersCode(int *sequence, int longueur){
-Code new_code;
-new_code.longueur = longueur;
-CopyversCode(new_code, sequence);
-return new_code;
+	Code new_code;
+	new_code.longueur = longueur;
+	CopyversCode(new_code, sequence);
+	return new_code;
 }
 
 
