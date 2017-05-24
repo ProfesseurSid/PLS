@@ -17,6 +17,6 @@ Code Fusion(Code prefixe, Code mono);
 int Chercher(Dico dico, Code prefixe, Code mono);
 Code Inserer(Dico dictio, Code prefixe, Code mono);
 int *CodeVersChaine(Code code);
-Code SequenceVersCode(int *sequence);
+Code SequenceVersCode(int *sequence, int longueur);
 
 #endif
