@@ -10,18 +10,18 @@ void Initialiser(Dico *dico){
 	Dico *add;
 	for(int i=0; i<=256; i++){
 		add->code = malloc(sizeof(int));
-		dico->dict[i].code = malloc(sizeof(int));
-		dico->dict[i].code[0] = i;
-		dico->dict[i].longueur = 1;
+		add->code[0] = i;
+		add->longueur = 1;
 		ajouter_noeud(dico, add);
 	}
-	for(int i=0; i<256; i++){
-		dico->dict[i].code = malloc(sizeof(int));
-		dico->dict[i].code[0] = i;
+	// for(int i=0; i<256; i++){
+	// 	add->code = malloc(sizeof(int));
+	// 	add->code[0] = i;
+	// }
+	for(int i=257; i<NBMAXSEQ; i++){
+		add->dict[i].longueur = 0;
+		ajouter_noeud(dico, add);
 	}
-	for(int i=257; i<NBMAXSEQ; i++)
-		dico->dict[i].longueur = 0;
-	dico->nbseq = 257;
 }
 
 /* cherche la chaine prefixe+mono dans le tableau. */
