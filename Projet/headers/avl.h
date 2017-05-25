@@ -1,3 +1,7 @@
+#ifndef _AVL_H
+#define _AVL_H
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -10,52 +14,38 @@ typedef struct n {
   int cle; // L'indice dans le dictionnaire
   struct n *fgauche, *fdroite;
   int *code;
+  int longueur;
   int bal; // desequilibre
-} Dico ;
+} Code ;
 
-/* type Arbre, pointeur vers un Dico */
+/* type Dico, pointeur vers un Dico */
 
-typedef Dico *Arbre; 
+typedef Code *Dico; 
 
-/* n nouveau n a ajouter dans l'arbre a */
-
-typedef struct
-{
-  int tete,queue,taille;
-  Arbre *tab;
-} file;
-void init(file *f, int nbelem)
-int empty(file *f)
-Arbre get(file *f)
-void put(file *f, Arbre a)
-int feuille (Arbre a)
-Arbre ajouter_Dico (Arbre a, Arbre n)
-Arbre rechercher_cle_arbre (Arbre a, int valeur)
-void afficher_arbre (Arbre a, int niveau)
-int hauteur_arbre (Arbre a)
-void parcourir_arbre (Arbre a, int *t, int niveau)
-void nombre_Dicos_par_niveau (Arbre a)
-int nombre_cles_arbre (Arbre a)
-Arbre cle_superieure_arbre (Arbre a, int valeur, Arbre *sup)
-Arbre rechercher_cle_sup_arbre (Arbre a, int valeur)
-Arbre rotationDroite(Arbre a)
-Arbre rotationGauche(Arbre a)
-Arbre doubleRotationGauche(Arbre a)
-Arbre doubleRotationDroite(Arbre a
-Arbre Equilibrage(Arbre a)
-Arbre ajouter_cle (Arbre a, int cle)
-Arbre cle_inferieure_arbre (Arbre a, int valeur, Arbre *inf)
-Arbre rechercher_cle_inf_arbre (Arbre a, int valeur)
-int EquilibreComplet1 (Arbre a)
-int EquilibreComplet2 (Arbre a)
-Arbre lire_arbre (char *nom_fichier)
-Arbre detruire_cle_arbre (Arbre a, int cle)
-int trouver_cle_min (Arbre a)
-void imprimer_liste_cle_triee (Arbre a)
-void parcourir_arbre_largeur (Arbre a)
-Arbre union_deux_arbres (Arbre a1, Arbre a2)
-Arbre intersection_deux_arbres (Arbre a1, Arbre a2)
+int feuille (Dico a);
+Dico ajouter_noeud (Dico a, Dico n);
+Dico rechercher_cle_arbre (Dico a, int valeur);
+void afficher_arbre (Dico a, int niveau);
+int hauteur_arbre (Dico a);
+void parcourir_arbre (Dico a, int *t, int niveau);
+void nombre_noeuds_par_niveau (Dico a);
+int nombre_cles_arbre (Dico a);
+Dico cle_superieure_arbre (Dico a, int valeur, Dico *sup);
+Dico rechercher_cle_sup_arbre (Dico a, int valeur);
+Dico rotationDroite(Dico a);
+Dico rotationGauche(Dico a);
+Dico doubleRotationGauche(Dico a);
+Dico doubleRotationDroite(Dico a);
+Dico Equilibrage(Dico a);
+Dico ajouter_Code (Dico a, int cle, int *sequence, int longueur);
+Dico cle_inferieure_arbre (Dico a, int valeur, Dico *inf);
+Dico rechercher_cle_inf_arbre (Dico a, int valeur);
+int EquilibreComplet1 (Dico a);
+int EquilibreComplet2 (Dico a);
+// Dico lire_arbre (char *nom_fichier);
+Dico detruire_cle_arbre (Dico a, int cle);
+int trouver_cle_min (Dico a);
 //Dit si l'ensemble des clefs de a1 sont inclues dans a2
-int inclusion_arbre (Arbre a1, Arbre a2)
+int inclusion_arbre (Dico a1, Dico a2);
 
-
+#endif

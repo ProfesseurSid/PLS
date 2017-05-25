@@ -1,63 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include "avl.h"
 
 #define max(a,b) ((a)>(b)?(a):(b))
 
-/* structure noeud presentee en cours */
-
-typedef struct n {
-  int cle; // L'indice dans le dictionnaire
-  struct n *fgauche, *fdroite;
-  int *code;
-  int bal; // desequilibre
-} Dico ;
-
-/* type Arbre, pointeur vers un noeud */
-
-typedef Dico *Arbre; 
-
-/* n nouveau n a ajouter dans l'arbre a */
-
-typedef struct
-{
-  int tete,queue,taille;
-  Arbre *tab;
-} file;
-
-
-void init(file *f, int nbelem)
-{
-  f->tete = 0;
-  f->queue = 0;
-  f->taille = nbelem;
-  f->tab = malloc(nbelem * sizeof(Arbre));
-}
-
-int empty(file *f)
-{
-  return f->tete == f->queue;
-}
-
-Arbre get(file *f)
-{
-  Arbre e;
-  if(empty(f)) return NULL;
-  else
-  {
-    e = f->tab[f->tete];
-    f->tete = (f->tete + 1)%f->taille;
-  }
-  return e;
-}
-
-void put(file *f, Arbre a)
-{
-  f->tab[f->queue] = a;
-  f->queue =(1 + f->queue)%f->taille;
-}
-
-int feuille (Arbre a)
+int feuille (Dico a)
 {
   if (a == NULL)
     return 0 ;
@@ -70,21 +18,22 @@ int feuille (Arbre a)
     }
 }
 
-Arbre ajouter_noeud (Arbre a, Arbre n)
+Dico ajouter_noeud (Dico a, Dico n)
 {
   /* ajouter le noeud n dans l'arbre a */
-  
   if (a == NULL)
     return n ;
-  else if (n->cle < a->cle)
-	a->fgauche = ajouter_noeud (a->fgauche, n) ;
-  else
-	a->fdroite = ajouter_noeud (a->fdroite, n) ;
+  else if (n->cle < a->cle){
+    a->fgauche = ajouter_noeud (a->fgauche, n) ;
+  }
+  else{
+    a->fdroite = ajouter_noeud (a->fdroite, n) ;
+  }
   return a ;
   
 }  
 
-Arbre rechercher_cle_arbre (Arbre a, int valeur)
+Dico rechercher_cle_arbre (Dico a, int valeur)
 {
   if (a == NULL)
     return NULL ;
@@ -101,7 +50,7 @@ Arbre rechercher_cle_arbre (Arbre a, int valeur)
 }
 
 
-void afficher_arbre (Arbre a, int niveau)
+void afficher_arbre (Dico a, int niveau)
 {
   /*
     affichage de l'arbre a
@@ -123,7 +72,7 @@ void afficher_arbre (Arbre a, int niveau)
   return ;
 }
 
-int hauteur_arbre (Arbre a)
+int hauteur_arbre (Dico a)
 {
   /*
     calculer la hauteur de l'arbre a
@@ -138,7 +87,7 @@ int hauteur_arbre (Arbre a)
     }
 }
 
-void parcourir_arbre (Arbre a, int *t, int niveau)
+void parcourir_arbre (Dico a, int *t, int niveau)
 {
   if (a == NULL)
     return ;
@@ -150,7 +99,7 @@ void parcourir_arbre (Arbre a, int *t, int niveau)
   return ;
 }
 
-void nombre_noeuds_par_niveau (Arbre a)
+void nombre_noeuds_par_niveau (Dico a)
 {
   int i  ;
   int *t ;
@@ -180,19 +129,22 @@ void nombre_noeuds_par_niveau (Arbre a)
   return ;
 }
 
-int nombre_cles_arbre (Arbre a)
+int nombre_cles_arbre (Dico a)
 {
   if (a == NULL)
     return 0 ;
   else
     {
-      return 1 + nombre_cles_arbre (a->fgauche) + nombre_cles_arbre (a->fdroite) ;
+      if(a->longueur > 0)
+        return 1 + nombre_cles_arbre (a->fgauche) + nombre_cles_arbre (a->fdroite) ;
+      else
+        return nombre_cles_arbre (a->fgauche) + nombre_cles_arbre (a->fdroite) ;
     }
 }
 
 
 
-Arbre cle_superieure_arbre (Arbre a, int valeur, Arbre *sup)
+Dico cle_superieure_arbre (Dico a, int valeur, Dico *sup)
 {
   if (a == NULL)
     return *sup ;
@@ -213,23 +165,23 @@ Arbre cle_superieure_arbre (Arbre a, int valeur, Arbre *sup)
     }
 }
 
-Arbre rechercher_cle_sup_arbre (Arbre a, int valeur)
+Dico rechercher_cle_sup_arbre (Dico a, int valeur)
 {
-  Arbre ptrouve ;
-  Arbre psup = NULL ;
+  Dico ptrouve ;
+  Dico psup = NULL ;
     
   ptrouve = cle_superieure_arbre (a, valeur, &psup) ;
   return ptrouve ;
   
 }
 
-Arbre rotationDroite(Arbre a){
+Dico rotationDroite(Dico a){
   // Je deviens le fils droit de mon fils gauche
   if (a != NULL){  
-    Arbre NR = a->fgauche ;
+    Dico NR = a->fgauche ;
     if(NR!=NULL){
       a->fgauche = NR->fdroite ;
-      Arbre Pred = rechercher_cle_sup_arbre(a, a->cle) ;
+      Dico Pred = rechercher_cle_sup_arbre(a, a->cle) ;
       if(Pred != NULL && Pred->fdroite == a) 
         Pred->fdroite = NR ;
       if(Pred != NULL && Pred->fgauche == a) 
@@ -245,13 +197,13 @@ Arbre rotationDroite(Arbre a){
   return a ;
 }
 
-Arbre rotationGauche(Arbre a){
+Dico rotationGauche(Dico a){
   // Je deviens le fils gauche de mon fils droit
   if (a != NULL){
-    Arbre NR = a->fdroite ;
+    Dico NR = a->fdroite ;
     if(NR != NULL){
       a->fdroite = NR->fgauche ;
-      Arbre Pred = rechercher_cle_sup_arbre(a, a->cle) ;
+      Dico Pred = rechercher_cle_sup_arbre(a, a->cle) ;
       if(Pred != NULL && Pred->fgauche == a) 
         Pred->fgauche = NR ;
       if(Pred != NULL && Pred->fdroite == a) 
@@ -267,19 +219,19 @@ Arbre rotationGauche(Arbre a){
   return a ;
 }
 
-Arbre doubleRotationGauche(Arbre a){
+Dico doubleRotationGauche(Dico a){
   // Je deviens le fils gauche du fils gauche de mon fils droit
   a->fdroite = rotationDroite(a->fdroite) ;
   return rotationGauche(a) ;
 }
 
-Arbre doubleRotationDroite(Arbre a){
+Dico doubleRotationDroite(Dico a){
   // Je deviens le fils droit du fils droit de mon fils gauche
   a->fgauche = rotationGauche(a->fgauche) ;
   return rotationDroite(a) ;
 }
 
-Arbre Equilibrage(Arbre a){
+Dico Equilibrage(Dico a){
   // Selon l'algorithme donne dans le polycopie
   if (a->bal >= 2){
     if (a->fdroite->bal >= 0){
@@ -302,10 +254,10 @@ Arbre Equilibrage(Arbre a){
   }
 }
 
-Arbre ajouter_cle (Arbre a, int cle)
+Dico ajouter_Code (Dico a, int cle, int *sequence, int longueur)
 {
-  Arbre n ;
-  Arbre ptrouve ;
+  Dico n ;
+  Dico ptrouve ;
   
   /* 
      ajout de la clé. Creation du noeud n qu'on insere 
@@ -316,13 +268,17 @@ Arbre ajouter_cle (Arbre a, int cle)
 
   if (ptrouve == NULL)
   {
-    n = (Arbre) malloc (sizeof(noeud)) ;
+    n = malloc (sizeof(Code)) ;
     n->cle = cle;
+    n->longueur = longueur;
+    n->code = malloc(longueur*sizeof(int));
+    for(int i=0; i<longueur; i++)
+      n->code[i] = sequence[i];
     n->fgauche = NULL ;
     n->fdroite = NULL ;
     n->bal = 0 ;
     a = ajouter_noeud (a, n) ;
-    Arbre AC=rechercher_cle_sup_arbre(a, n->cle) ;
+    Dico AC=rechercher_cle_sup_arbre(a, n->cle) ;
     while(AC!=NULL && AC->bal<2 && AC->bal>-2){
       AC->bal = hauteur_arbre(AC->fdroite) - hauteur_arbre(AC->fgauche) ;
       if (AC->bal<2 && AC->bal>-2)
@@ -330,7 +286,7 @@ Arbre ajouter_cle (Arbre a, int cle)
     }
 
     if (AC != NULL){
-      Arbre Pred = rechercher_cle_sup_arbre(a, AC->cle) ;
+      Dico Pred = rechercher_cle_sup_arbre(a, AC->cle) ;
       if (Pred == NULL){
         a = Equilibrage(a) ;
       }
@@ -348,7 +304,7 @@ Arbre ajouter_cle (Arbre a, int cle)
     return a ;
 }
 
-Arbre cle_inferieure_arbre (Arbre a, int valeur, Arbre *inf)
+Dico cle_inferieure_arbre (Dico a, int valeur, Dico *inf)
 {
   if (a == NULL)
     return *inf ;
@@ -364,16 +320,16 @@ Arbre cle_inferieure_arbre (Arbre a, int valeur, Arbre *inf)
     }
 }
 
-Arbre rechercher_cle_inf_arbre (Arbre a, int valeur)
+Dico rechercher_cle_inf_arbre (Dico a, int valeur)
 {
-  Arbre ptrouve ;
-  Arbre pinf = NULL ;
+  Dico ptrouve ;
+  Dico pinf = NULL ;
     
   ptrouve = cle_inferieure_arbre (a, valeur, &pinf) ;
   return ptrouve ;  
 }
 
-int EquilibreComplet1 (Arbre a)
+int EquilibreComplet1 (Dico a)
 {
   int h ;
   int nbcles;
@@ -391,7 +347,7 @@ int EquilibreComplet1 (Arbre a)
     return 0 ;
 }
 
-int EquilibreComplet2 (Arbre a)
+int EquilibreComplet2 (Dico a)
 {
 
   if (a == NULL)
@@ -403,27 +359,27 @@ int EquilibreComplet2 (Arbre a)
   return (EquilibreComplet2 (a->fgauche) && EquilibreComplet2 (a->fdroite)) ; 
 }
 
-Arbre lire_arbre (char *nom_fichier)
-{
-  FILE *f ;
-  int cle;
-  Arbre a = NULL;
+// Dico lire_arbre (char *nom_fichier)
+// {
+//   FILE *f ;
+//   int cle;
+//   Dico a = NULL;
   
-  f = fopen (nom_fichier, "r") ;
+//   f = fopen (nom_fichier, "r") ;
 
-  while (fscanf (f, "%d", &cle) != EOF)
-    {
-      a = ajouter_cle (a, cle) ;
-    }
+//   while (fscanf (f, "%d", &cle) != EOF)
+//     {
+//       a = ajouter_cle (a, cle) ;
+//     }
     
-  fclose (f) ;
+//   fclose (f) ;
 
-  return a ;
-}
+//   return a ;
+// }
 
-Arbre detruire_cle_arbre (Arbre a, int cle)
+Dico detruire_cle_arbre (Dico a, int cle)
 {
-  Arbre AC = NULL ;
+  Dico AC = NULL ;
   // Si la cle est absente ou l'arbre vide, renvoie l'arbre tel quel
   if((a == NULL) || (rechercher_cle_arbre(a,cle) == NULL)) 
     return a ;
@@ -459,9 +415,9 @@ Arbre detruire_cle_arbre (Arbre a, int cle)
   // Et on reequilibre si necessaire
   else
   {
-    Arbre AP = NULL ;
-    Arbre AD = NULL ;
-    Arbre Temp = NULL ;
+    Dico AP = NULL ;
+    Dico AD = NULL ;
+    Dico Temp = NULL ;
     AC = rechercher_cle_arbre(a, cle) ;
 
     if(AC != NULL){ // Ne dois pas pouvoir se produire grace au tout premier test, mais est une securite supplementaire
@@ -469,7 +425,7 @@ Arbre detruire_cle_arbre (Arbre a, int cle)
         AP=AC->fgauche ;
       if(AC->fdroite != NULL)
         AD=AC->fdroite ;
-      Arbre Pred = rechercher_cle_sup_arbre(a, cle) ;
+      Dico Pred = rechercher_cle_sup_arbre(a, cle) ;
       if(cle < Pred->cle)
         Pred->fgauche = NULL ;
       else
@@ -522,9 +478,9 @@ Arbre detruire_cle_arbre (Arbre a, int cle)
   }
 }
 
-int trouver_cle_min (Arbre a)
+int trouver_cle_min (Dico a)
 {
-  Arbre AC = NULL;
+  Dico AC = NULL;
 
   // On cherche la feuille la plus a gauche de l'arbre
   if(a == NULL)
@@ -542,113 +498,8 @@ int trouver_cle_min (Arbre a)
   }
 }
 
-void imprimer_liste_cle_triee (Arbre a)
-{
-  Arbre AC = a;
-  int min;
-  
-  // Si la racine n'est pas NULL,
-  // On envoie la fonction sur l'arbre gauche
-  // Puis on affiche la cle courante
-  // Enfin, on envoie la fonction sur l'arbre gauche
-  if(a == NULL){
-    return;
-  }
-  else{
-    imprimer_liste_cle_triee(a->fgauche);
-    printf("%d ", a->cle);
-    imprimer_liste_cle_triee(a->fdroite);
-  }
-}
-
-//Afiche les clefs de l'arbre par niveau
-void parcourir_arbre_largeur (Arbre a)
-{
-  file liste, stock;
-  init(&liste, nombre_cles_arbre(a));
-  init(&stock, nombre_cles_arbre(a));
-
-  // A chaque iteration, ajoute les fils des noeuds de la file
-  // A la seconde file, puis affiche lesdits noeuds
-  // Et opere la meme chose de la seconde a la premiere, pour reduire le nombre de tours
-  // Et eviter une simple copie de la seconde a la premiere file
-  put(&liste, a);
-  for(int i=0;i<=(hauteur_arbre(a)/2)+1;i+=2){
-    if(!empty(&liste))
-      printf("hauteur %i : ", i);
-    while(!empty(&liste)){
-      Arbre AC = get(&liste);
-      if(AC->fdroite!=NULL)
-        put(&stock, AC->fdroite);
-      if(AC->fgauche!=NULL)
-        put(&stock, AC->fgauche);
-      printf("%i ", AC->cle);
-    }
-    printf("\n");
-
-    if(!empty(&stock))
-      printf("hauteur %i : ", i+1);
-    while(!empty(&stock)){
-      Arbre AC = get(&stock);
-      if(AC->fdroite!=NULL)
-        put(&liste, AC->fdroite);
-      if(AC->fgauche!=NULL)
-        put(&liste, AC->fgauche);
-      printf("%i ", AC->cle);
-    }
-    printf("\n");
-  }
-  printf("\n");
-}
-
-
-
-Arbre union_deux_arbres (Arbre a1, Arbre a2)
-{
-  // Si l'un ou les deux arbres sont NULL, renvoie l'autre
-  if(a1 == NULL && a2 == NULL)
-    return NULL ;
-  else if(a2 == NULL)
-    return a1 ;
-  else if(a1 == NULL)
-    return a2 ;
-  // Sinon, si la racine de a2 n'est pas dans a1, 
-  // L'ajoute a l'arbre resultat
-  // puis cherche dans les fils de a2 les cles non presentes
-  else{
-    if(rechercher_cle_arbre(a1, a2->cle) == NULL)
-        a1 = ajouter_cle(a1, a2->cle) ;
-    a1 = union_deux_arbres(a1, a2->fgauche) ;
-    a1 = union_deux_arbres(a1, a2->fdroite) ;
-    return a1 ;
-  }
-}
-
-Arbre intersection_deux_arbres (Arbre a1, Arbre a2)
-{
-  if(a1 != NULL){
-    // Si la cle est absente du deuxieme arbre,
-    // on la retire de l'arbre resultat
-    if(rechercher_cle_arbre(a2, a1->cle) == NULL){
-      a1=detruire_cle_arbre(a1, a1->cle) ;
-      a1=intersection_deux_arbres(a1, a2) ;
-    }
-    // Sinon, l'arbre resultat devient l'union de l'intersection des ses fils et a2
-    // a quoi on ajoute la cle actuelle
-    else if(a1->fgauche != NULL && a1->fdroite != NULL)
-      a1=ajouter_cle(union_deux_arbres(intersection_deux_arbres(a1->fgauche, a2), intersection_deux_arbres(a1->fdroite, a2)), a1->cle);
-    else if(a1->fgauche != NULL)
-      a1=ajouter_cle(intersection_deux_arbres(a1->fgauche, a2), a1->cle);
-    else if(a1->fdroite != NULL)
-      a1=ajouter_cle(intersection_deux_arbres(a1->fdroite, a2), a1->cle);
-    else
-      return a1;
-  }
-}
-
-
 //Dit si l'ensemble des clefs de a1 sont inclues dans a2
-int inclusion_arbre (Arbre a1, Arbre a2)
+int inclusion_arbre (Dico a1, Dico a2)
 {
   // Renvoie le booleen "la cle actuelle est dans a2, et l'ensemble des cles de mes fils aussi"
   if(a1!=NULL){
@@ -658,144 +509,4 @@ int inclusion_arbre (Arbre a1, Arbre a2)
     return 1;
   }
 
-}
-
-
-
-int main (int argc, char**argv)
-{
-  Arbre a,a1,a2 ;
-  int x ;
-  int bool ;
-  Arbre  ptrouve = NULL ;
-
-  if (argc != 3)
-    {
-      fprintf (stderr, "il manque le parametre nom de fichier\n") ;
-      exit (-1) ;
-    }
-
-  a = lire_arbre (argv[1]) ;
-  a1 = lire_arbre (argv[2]) ;
-
-  printf("------\na1 : |\n------\n\n") ;
-  afficher_arbre (a,0) ;
-  printf("------\na2 : |\n------\n\n") ;
-  afficher_arbre (a1,0) ;
-  printf("---------\na1Ua2 : |\n---------\n\n") ;
-  a2 = union_deux_arbres(a,a1) ;
-  afficher_arbre (a2,0) ;
-
-  printf("Tests d'inclusion :\n") ;
-  printf(">> a1 contenu dans a1Ua2 : %i\n", inclusion_arbre(a, a2)) ;
-  printf(">> a2 contenu dans a1Ua2 : %i\n", inclusion_arbre(a1, a2)) ;
-  printf(">> a1Ua2 contenu dans a1Ua2 : %i\n", inclusion_arbre(a2, a2)) ;
-  printf(">> a1Ua2 contenu dans a1 : %i\n\n", inclusion_arbre(a2, a)) ;
-
-  a = lire_arbre (argv[1]) ;
-  a1 = lire_arbre (argv[2]) ;
-
-  printf("------\na1 : |\n------\n\n") ;
-  afficher_arbre (a,0) ;
-  printf("------\na2 : |\n------\n\n") ;
-  afficher_arbre (a1,0) ;
-  printf("---------------\na1 inter a2 : |\n---------------\n\n") ;
-  a2 = intersection_deux_arbres(a,a1) ;
-  afficher_arbre (a2,0) ;
-
-  printf("\n\nTests de ajout/suppression :\n") ;
-  a = lire_arbre (argv[1]) ;
-  a1 = lire_arbre (argv[2]) ;
-  printf("Arbre de depart :\n") ;
-  afficher_arbre(a1, 0) ;
-  printf("suppression de 28...\n") ;
-  a1 = detruire_cle_arbre(a1, 28) ;
-  afficher_arbre(a1, 0) ;
-  printf("ajout de 28...\n") ;
-  a1 = ajouter_cle(a1, 28);
-  afficher_arbre(a1, 0) ;
-  printf("suppression de 15...\n") ;
-  a1 = detruire_cle_arbre(a1, 15) ;
-  afficher_arbre(a1, 0) ;
-  printf("ajout de 15...\n") ;
-  a1 = ajouter_cle(a1, 15) ;
-  afficher_arbre(a1, 0) ;
-  printf("ajout de 16...\n") ;
-  a1 = ajouter_cle(a1, 16) ;
-  afficher_arbre(a1, 0) ;
-  printf("suppression de 2...\n") ;
-  a1 = detruire_cle_arbre(a1, 2) ;
-  afficher_arbre(a1, 0) ;
-  printf("suppression de 5...\n") ;
-  a1 = detruire_cle_arbre(a1, 5) ;
-  afficher_arbre(a1, 0) ;
-  printf("suppression de la racine...\n") ;
-  a1 = detruire_cle_arbre(a1, a1->cle) ;
-  afficher_arbre(a1, 0) ;
-
-
-  // a = lire_arbre (argv[1]) ;
-  // a1 = lire_arbre (argv[2]) ;
-
-  printf("Parcours en largeur de l'arbre resultat :\n") ;
-  parcourir_arbre_largeur(a1) ;
-
-  printf("Cles triees de a1 : ") ;
-  imprimer_liste_cle_triee(a) ;
-  printf("\n") ;
-
-
-/*
-  printf("Clé min : %d\n",trouver_cle_min(a));
-
-  printf ("Hauteur %d\n", hauteur_arbre (a)) ;
-
-  nombre_noeuds_par_niveau (a) ;
-
-  printf ("Nombre cles de l'arbre %d\n", nombre_cles_arbre (a)) ;
-*/
-/*
-  bool = EquilibreComplet1 (a) ;
-  if (bool = 1)
-    printf ("Methode 1: Arbre equilibre complet\n") ;
-  else
-    printf ("Methode 1: Arbre n'est pas equilibre complet\n") ;
-*/
-/*  
-  bool = EquilibreComplet2 (a) ;
-  if (bool = 1)
-    printf ("Methode 2: Arbre equilibre complet\n") ;
-  else
-    printf ("Methode 2: Arbre n'est pas equilibre complet\n") ;
-*/
-
-  /*
-    Appels des fonctions de recherche de cles
-  */
-/*
-  printf ("Entrez une cle a rechercher\n") ;
-
-  scanf ("%d", &x) ;
-
-  ptrouve = rechercher_cle_arbre (a, x) ;
-
-  if (ptrouve != NULL)
-    printf ("la cle %d est dans l'arbre\n", x) ;
-  else
-    printf ("la cle %d n'est pas dans l'arbre\n", x) ;
-
-  ptrouve = rechercher_cle_sup_arbre (a, x) ;
-
-  if (ptrouve != NULL)
-    printf ("la cle sup de %d est %d\n", x, ptrouve->cle) ;
-  else
-    printf ("il n'y a pas de cle sup pour %d\n", x) ;
-
-  ptrouve = rechercher_cle_inf_arbre (a, x) ;
-
-  if (ptrouve != NULL)
-    printf ("la cle inf de %d est %d\n", x, ptrouve->cle) ;
-  else
-    printf ("il n'y a pas de cle inf pour %d\n", x) ;
-*/
 }
