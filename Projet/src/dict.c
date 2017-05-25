@@ -54,7 +54,7 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 		if(dico.dict[i].longueur == prefixe.longueur){
 			int idem=1;
 			for(int j = 0; j<prefixe.longueur; j++){
-				printf("dico : %c ; pref : %c\n", dico.dict[i].code[j], prefixe.code[j]);
+				// printf("dico : %c ; pref : %c\n", dico.dict[i].code[j], prefixe.code[j]);
 				idem = idem && (dico.dict[i].code[j] == prefixe.code[j]);
 			}
 			if(idem)
