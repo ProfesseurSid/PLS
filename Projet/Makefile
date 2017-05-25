@@ -1,7 +1,6 @@
 ## DEFINITION DES VARIABLES ##
 EXE=lzw
 CC=gcc
-# CFLAGS=-g -Ithe_headers -lvt100 -L../../lib/ -Wall -Werror 
 CFLAGS=-g -Iheaders -Wall -Werror
 
 SRCS=src/*
