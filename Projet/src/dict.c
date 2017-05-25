@@ -1,18 +1,19 @@
-// TODO : AVL
-
 #include "dict.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "avl.h"
 
 #define NBMAXSEQ 512
 
 
 void Initialiser(Dico *dico){
-	dico->dict = malloc(NBMAXSEQ*sizeof(int));
+	Dico *add;
 	for(int i=0; i<=256; i++){
+		add->code = malloc(sizeof(int));
 		dico->dict[i].code = malloc(sizeof(int));
 		dico->dict[i].code[0] = i;
 		dico->dict[i].longueur = 1;
+		ajouter_noeud(dico, add);
 	}
 	for(int i=0; i<256; i++){
 		dico->dict[i].code = malloc(sizeof(int));
