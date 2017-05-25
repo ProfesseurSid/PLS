@@ -73,6 +73,7 @@ while ( !feof(fp) ){
 	else {
 		//Affichage de l'indice dans le fichier de sortie
 		fprintf(result,"%d",sortie);
+		fprintf(result," ");
 		
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
 			// printf("uiui\n");
