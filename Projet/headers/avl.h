@@ -25,6 +25,7 @@ typedef Code *Dico;
 int feuille (Dico a);
 Dico ajouter_noeud (Dico a, Dico n);
 Dico rechercher_cle_arbre (Dico a, int valeur);
+int cle_max(Dico a);
 void afficher_arbre (Dico a, int niveau);
 int hauteur_arbre (Dico a);
 void parcourir_arbre (Dico a, int *t, int niveau);

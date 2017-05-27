@@ -17,9 +17,6 @@ void Initialiser(Dico *dico){
 	for(int i=1; i<=256; i++){
 		*dico = ajouter_Code(*dico, i, &i, 1);
 	}
-	for(int i=257; i<NBMAXSEQ; i++){
-		*dico = ajouter_Code(*dico, i, &i, 0);
-	}
 }
 
 /* cherche la chaine prefixe+mono dans le tableau. */
@@ -43,21 +40,24 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 	}
 	while((i < nombre_cles_arbre(dico)) && (retour >= 0)){
 		// printf("lg : %i, %i\n", rechercher_cle_arbre(dico,i)->longueur, prefixe.longueur);
+		// printf("long du pref : %i\n", prefixe.longueur);
+		// printf("lond de lele %i : %i\n", i, rechercher_cle_arbre(dico,i)->longueur);
 		if(rechercher_cle_arbre(dico,i)->longueur == prefixe.longueur+1){
+			// printf("OUIOUIOUI\n");
 			int idem=1;
 			for(int j = 0; j < prefixe.longueur; j++){
 				idem = idem && (prefixe.code[j] == rechercher_cle_arbre(dico,i)->code[j]);
 			}
-			printf("idem : %i\n", idem);
+			// printf("idem : %i\n", idem);
 			idem = idem && (rechercher_cle_arbre(dico,i)->code[prefixe.longueur] == mono.code[0]);
-			printf("idem : %i\n", idem);
+			// printf("idem : %i\n", idem);
 
 			if(idem)
 				retour = -1;
 		}
 		i++;
 	}
-	printf("retour : %i\n", retour);
+	// printf("retour : %i\n", retour);
 	return retour;
 }
 
@@ -79,7 +79,7 @@ void Fusion(Code prefixe, Code mono, Code *retour){
 	}
 	retour->code[prefixe.longueur] = mono.code[0];
 	retour->longueur = prefixe.longueur + 1;
-	printf("len : %i\n", retour->longueur);
+	// printf("len : %i\n", retour->longueur);
 }
 
 
@@ -101,8 +101,9 @@ int Inserer(Dico *dictio, Code prefixe, Code mono){
 	else {
 		Fusion(prefixe,mono,&fusion);
 		printf("nbc : %i\n", nombre_cles_arbre(*dictio));
-		ajouter_Code(*dictio, nombre_cles_arbre(*dictio), fusion.code, fusion.longueur);
-		printf("leeeeeen : %i\n",fusion.longueur);
+		*dictio = ajouter_Code(*dictio, cle_max(*dictio)+1, fusion.code, fusion.longueur);
+		// printf("leeeeeen : %i\n",fusion.longueur);
+		// printf("but len : %i\n", rechercher_cle_arbre(*dictio, cle_max(*dictio))->longueur);
 		if(nombre_cles_arbre(*dictio) < NBMAXSEQ) {
 			return 1;
 		}
@@ -139,16 +140,19 @@ Code SequenceVersCode(int *sequence, int longueur){
 
 
 int Appartient(Dico dictio, int ind){
-	if(ind<512)
-		return rechercher_cle_arbre(dictio,ind)->longueur;
-	else
-		return -1;
+	return rechercher_cle_arbre(dictio,ind)!=NULL;
 }
 
 int longueur(Dico dictio, int ind){
-	return rechercher_cle_arbre(dictio,ind)->longueur;
+	if(rechercher_cle_arbre(dictio,ind) != NULL)
+		return rechercher_cle_arbre(dictio,ind)->longueur;
+	else
+		return 0;
 }
 
 int element(Dico dictio, int ind, int elem){
-	return rechercher_cle_arbre(dictio,ind)->code[elem];
+	if(rechercher_cle_arbre(dictio,ind) != NULL)
+		return rechercher_cle_arbre(dictio,ind)->code[elem];
+	else
+		return -1;
 }

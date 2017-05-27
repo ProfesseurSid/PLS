@@ -49,6 +49,14 @@ Dico rechercher_cle_arbre (Dico a, int valeur)
   }
 }
 
+int cle_max (Dico a){
+  int l=0,r=0;
+  if(a->fdroite != NULL)
+    r = cle_max(a->fdroite);
+  if(a->fgauche != NULL)
+    l = cle_max(a->fgauche);
+  return max(a->cle,max(l,r));
+}
 
 void afficher_arbre (Dico a, int niveau)
 {
@@ -271,6 +279,7 @@ Dico ajouter_Code (Dico a, int cle, int *sequence, int longueur)
     n = malloc (sizeof(Code)) ;
     n->cle = cle;
     n->longueur = longueur;
+    // printf("longueur : %i\n", n->longueur);
     n->code = malloc(longueur*sizeof(int));
     for(int i=0; i<longueur; i++)
       n->code[i] = sequence[i];

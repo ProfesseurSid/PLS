@@ -63,7 +63,7 @@ while ( !feof(fp) ){
 		temp[wlength] = a;
 		wlength++;
 		w = temp;
-		printf("on augmente\n");
+		// printf("on augmente\n");
 	}
 	else {
 		//Affichage de l'indice dans le fichier de sortie
