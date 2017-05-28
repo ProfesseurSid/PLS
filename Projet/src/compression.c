@@ -13,7 +13,7 @@ int wlength=1;
 int sortie;
 
 //Le dictionnaire
-Dico dico;
+Dico dico = NULL;
 
 Code prefix, mono;
 
@@ -56,7 +56,6 @@ while ( !feof(fp) ){
 	if ( sortie == -1 ) {
 		//On ralonge le préfixe.
 		int* temp = malloc((wlength+1)*sizeof(int));
-		// memcpy(temp,w,wlength-1);
 		for(int l=0; l<wlength; l++)
 			temp[l] = w[l];
 		// *( temp + wlength-1 ) = a;
@@ -68,19 +67,18 @@ while ( !feof(fp) ){
 	else {
 		//Affichage de l'indice dans le fichier de sortie
 		fprintf(result,"%d ",sortie);
-		// fprintf(result," ");
 
 
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
 			// printf("uiui\n");
-		if ( !Inserer( &dico , prefix , mono) ) {
-			fprintf(result, "%d ",element(dico,256,0));
-			Initialiser(&dico);
-		}
+		// if ( !Inserer( &dico , prefix , mono) ) {
+		// 	fprintf(result, "%d ",element(dico,256,0));
+		// 	Initialiser(&dico);
+		// }
 
 		//On replace w sur le dernier caractère lu
 		wlength = 1;
-		w = malloc ( wlength * sizeof (int) ) ;
+		w = realloc ( w, wlength * sizeof (int) ) ;
 		w[0] = a;
 	}
 }

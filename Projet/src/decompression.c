@@ -31,9 +31,9 @@ void decodage (char* fichier,char* sortie){
   int i,j;
   Code ac;
   Code wc;
-  Dico D;
+  Dico D = NULL;
   Initialiser(&D);
-  int* w, *x, *a;
+  int* w, *x=NULL, *a;
   FILE *e = NULL;
   FILE *s = NULL;
   e = fopen(fichier, "r");
@@ -51,29 +51,27 @@ void decodage (char* fichier,char* sortie){
 
     while (!feof(e)){
       fscanf(e,"%d",&j);
-      printf(" elem %i : %i\n", j, element(D,j,0));
-        printf("there\n");
-      if (element(D,j,0) == element(D,256,0)){
-        Initialiser(&D);
-        fscanf(e,"%d",&j);
-      }
-      printf("cherche %d, appart : %i\n", j, Appartient(D,j)>0);
-      if (Appartient(D,j)>0){
-        x = malloc(longueur(D,j)*sizeof(int));
+      // printf(" elem %i... : %i\n", j, element(D,j,0));
+      // if (element(D,j,0) == element(D,256,0)){
+      //   Initialiser(&D);
+      //   // fscanf(e,"%d",&j);
+      // }
+      // printf("cherche %d, appart : %i\n", j, Appartient(D,j)>0);
+      /*else*/ if (Appartient(D,j)>0){
+        x = realloc(x, longueur(D,j)*sizeof(int));
         for(int k=0; k<longueur(D,j); k++)
           x[k] = element(D,j,k);
         ecriture(s,x,longueur(D,j));
         a[0] = x[0];
         ac = SequenceVersCode(a,1);
-        printf("OUI\n");
         wc = SequenceVersCode(w,longueur(D,i));
         Inserer(&D,wc,ac);
         i = j;
-        w = malloc(longueur(D,i)*sizeof(int));
+        w = realloc(w, longueur(D,i)*sizeof(int));
         for(int k=0; k<longueur(D,i); k++)
           w[k] = element(D,i,k);
       }else{
-        x = malloc((longueur(D,i)+1)*sizeof(int));
+        x = realloc(x, (longueur(D,i)+1)*sizeof(int));
         for(int k=0; k<longueur(D,i); k++)
           x[k] = element(D,i,k);
         x = concat(x, longueur(D,i), a, 1);

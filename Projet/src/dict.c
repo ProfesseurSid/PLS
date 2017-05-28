@@ -6,7 +6,7 @@
 #define NBMAXSEQ 512
 
 void Initialiser(Dico *dico){
-	*dico = malloc (sizeof(Code)) ;
+	*dico = realloc (*dico, sizeof(Code)) ;
     (*dico)->cle = 0;
     (*dico)->longueur = 1;
     (*dico)->code = malloc(sizeof(int));
@@ -14,7 +14,7 @@ void Initialiser(Dico *dico){
     (*dico)->fgauche = NULL ;
     (*dico)->fdroite = NULL ;
     (*dico)->bal = 0 ;
-	for(int i=1; i<=256; i++){
+	for(int i=1; i<=255; i++){
 		*dico = ajouter_Code(*dico, i, &i, 1);
 	}
 }
@@ -108,7 +108,8 @@ int Inserer(Dico *dictio, Code prefixe, Code mono){
 			return 1;
 		}
 		else{
-			return 0;
+			Initialiser(dictio);
+			return 1;
 		}
 	}
 }

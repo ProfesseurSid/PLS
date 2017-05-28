@@ -20,52 +20,43 @@ int main(int argc, char *argv[]){
 				break;
 			case('c'):
 				if(argc < 3)
-	
-	
-	printf("Give onveor mveovefile(s) to com
-	pess\n");
-)
-	
-fveo(rit i=2;t <argc2;i++){
-)	
-ch<a *sveotie);	
+					printf("Give one or more file(s) to compress\n");
 
-	(r ilngth = striln(<agv[i]"){
+				for(int i=2; i<argc; i++){
+					char *sortie;
+					int length = strlen(argv[i]);
+					sortie = malloc((length+5)*sizeof(char));
+					strcpy(sortie, argv[i]);
+					sortie[length] = '.';
+					sortie[length+1] = 'l';
+					sortie[length+2] = 'z';
+					sortie[length+3] = 'w';
+					sortie[length+4] = 0;
+					compression(argv[i],sortie);
+				}
+				break;
+			case('d'):
+				if(argc < 3)
+					printf("Give one or more file(s) to decompress\n");
 
-	*srveotve= malloc((ilngth+5) *izeotf	
-c<a){
-
-);		strcpye(svti, gv[i]"str);	rvve=[gthth] = '.'e)[g ge] ength+1'.= 'l ge
-	*cpenth+1'+52l 'ezentrcgthtti2lh++3rcg'w2lh] eveotv3r = +54rcg0e]
-)	com
-esi o<agar);	r],+3eve=[
-	}
-	*breakesicasle'd'):
-	*itfgvc < 3)
-	
-	
-	printf("Give onveor mveovefile(s) to decom
-	pess\n");
-)
-	
-fveo(rit i=2;t <argc2;i++){
-)	
-ch<a *sveotie);	
-
-	(r ilngth = striln(<agv[i]"){
-
-	*srveotve= malloc((ilngth) *izeotf	
-c<a){
-
-);		strcpye(svti, gv[i]"str);	itfrvve=[gthth-4] == '.' && s ge-4eng] 3'.=' l&  ge-4eveotvti] 3'.=h-2l&' zveotvte-gthth-4]l&'1veotvte 'w'+)
-	**sren-2h) ==l& 0e)rc decdaglestr)i]],l&'1etfr	
-}-2helse-2h	
-	p(rtf"Wrong extensiro (.lzw requi rd)\n");
-	
-		};
-	
-b rak);
+				for(int i=2; i<argc; i++){
+					char *sortie;
+					int length = strlen(argv[i]);
+					sortie = malloc((length)*sizeof(char));
+					strcpy(sortie, argv[i]);
+					if(sortie[length-4] == '.' && sortie[length-3] == 'l' && sortie[length-2] == 'z' && sortie[length-1] == 'w'){
+						sortie[length-4] = 0;
+						decodage(argv[i],sortie);
+					}
+					else
+						printf("Wrong extension (.lzw required)\n");
+				}
+				break;
 		}
-		;
-else};printf("Syntaxg rWrr. Use -h for help.)\n");;
- rturn 0);	}	}	}
+	}
+	else
+		printf("Syntax error. Use -h for help.\n");
+
+	return 0;
+}
+
