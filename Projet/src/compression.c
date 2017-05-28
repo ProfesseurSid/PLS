@@ -1,4 +1,4 @@
-#include <stdio.h>
+LL#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "dict.h"
@@ -6,19 +6,19 @@
 
 float Compression_Rate(char * f,char* fsor){
 	float initial_size = 0;
-	
+
 	FILE * fp;
 	fp = fopen(f,"r");
 	fseek(fp,0L,SEEK_END);
 	initial_size = ftell(fp);
 	fclose(fp);
-	
+
 	FILE *fs;
 	fs = fopen(fsor,"r");
 	fseek(fs,0L,SEEK_END);
 	initial_size = 100 * (1 - (ftell(fs)/initial_size));
 	fclose(fs);
-	
+
 	return initial_size;
 }
 
@@ -26,8 +26,7 @@ void compression(char* f,char* result_compress) {
 
 uint8_t sortie_hexa;
 uint32_t tampon = 0;
-int taille = 0;
-int nb_bits = 0;
+int nb_bits_restant = 32;
 int* w;
 int a;
 //La longueur du mot courant
@@ -96,37 +95,25 @@ while ( !feof(fp) ){
 	else {
 		//Affichage de l'indice dans le fichier de sortie
 
-//		// TEST DE BINARYIO ___________________________________________________---
+//		// PARTIE BINARYIO !!!!!!!!!!!!!!!!! A RAJOUTER (SECONDE A LA FIN DU CODE) ___________________________________________________------------------------------------
 
-		nb_bits = Taille(sortie);
-		// printf("\nTaille restante aa: %d\n", taille	);
-		// printf("\nNb_bits taille : %d\n", nb_bits);
-		if(taille + nb_bits > 32){
-			// printf("\nTaille restante : %d\n", taille	);
-			sortie_hexa = Retrait(&tampon, taille);
-			taille -= 8;
-			// printf("\nTaille restante : %d\n", taille	);
-			printf("%x ", sortie_hexa);
-			// printf("\n\n On passe dans le > 32\n");
-		}
-		else{
-			// printf("\nTaille restante : %d\n", taille	);
-			Ajout(sortie, &tampon, nb_bits);
-			if(nb_bits < 9){
-				taille += 9;
+			Ajout(sortie, &tampon, &nb_bits_restant);
+			sortie_hexa = Retrait(&tampon);
+			nb_bits_restant += 8;
+			printf("%c",sortie_hexa); //%c pour les chars (d'après Servan)
+			if(nb_bits_restant < 23){
+				sortie_hexa = Retrait(&tampon);
+				nb_bits_restant += 8;
+				printf("%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			}
-			else
-				taille += nb_bits;
-		}
 
-//		//_____________________________________________________________________---
+//		//_____________________________________________________________________-----------------------------------
 
 		fprintf(result,"%d ",sortie);
 		// fprintf(result," ");
 
 
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
-			// printf("uiui\n");
 		if ( !Inserer( &dico , prefix , mono) ) {
 			fprintf(result, "%d\n",dico.dict[256].code[0]);
 			Initialiser(&dico);
@@ -141,19 +128,18 @@ while ( !feof(fp) ){
 
 
 //Affichage de l'indice dans le fichier de sortie  uint8_t Retrait(uint32_t *tampon, int taille_act){   void Ajout(int ind, uint32_t *tampon, int taille){
-fprintf(result,"%d",sortie);
-// printf("Valeur du tampon avant vidage : %x \n",tampon);
-// printf("\nTaille restante : %d\n", taille	);
-while(taille >= 8){
-	sortie_hexa = Retrait(&tampon, taille);
-	taille = taille - 8;
-	// printf("\nTaille restante : %d\n", taille	);
-	printf("%x ", sortie_hexa);
+							// ?????????????????????????????????????????????
+fprintf(result,"%d",sortie);      //      < ========================== Sûrement de trop, on le ferai deux fois si on le compte non?
+							// ?????????????????????????????????????????????
+
+// ---------------------------------------------------- SECONDE PARTIE A RAJOUTER
+if(nb_bits_restant != 32){
+	sortie_hexa = Retrait(&tampon);
+	printf("%c", sortie_hexa); //%c pour les chars (d'après Servan)
 }
-sortie_hexa = Completion(&tampon, taille);
-// printf("%x ", sortie_hexa);
-taille = taille - 8;
-// printf("Taille restante : %d\n", taille	);
+// -----------------------------------------------------------------------------------FIN BINARYIO
+
+
 //Fin des opérations. Fermeture des fichiers.
 fclose(result);
 fclose(fp);

@@ -13,34 +13,40 @@ int Taille(int ind){
   return taille;
 }
 
+
 // Met à jour le tampon avec un nouvel indice et renvoie le nombre de bit supplémentaire utilisé
-void Ajout(int ind, uint32_t *tampon, int taille){
-  if(taille <= 9){
-    *tampon = *tampon << 9;
-    *tampon = *tampon | (uint32_t) ind;
-  }
-  else{
-    *tampon = *tampon << taille;
-    *tampon = *tampon | (uint32_t) ind;
+// Les bits sont stocké des bits de poids forts vers les bits de poids faibles
+// Lorsqu'on a ajouté notre nouveau code, on redécale afin de placer le bit de poids fort sur le bit 31,
+// Laissant les bits de poids faibles libre.
+void Ajout(int ind, uint32_t *tampon, int *nb_bits_restant){
+
+  *tampon = *tampon >> (*nb_bits_restant - 9);
+  *tampon = *tampon | (uint32_t) ind;
+  *nb_bits_restant -= 9;
+  *tampon = *tampon << (*nb_bits_restant);
 }
-}
+
 
 // Renvoie les 8 octets de poids forts remplis de tampon à écrire
-uint8_t Retrait(uint32_t *tampon, int taille_act){
+// On décale les bits afin d'avoir les 8 bits que l'on veut sortir en bit de poids faible.
+// Puis on fait un masquage afin de remettre ces bits à 0.
+// Finalement, on replace la suite de bit en poids fort.
+uint8_t Retrait(uint32_t *tampon){
   uint8_t valeur;
 // printf("\n\n affichage de tampon initial: %x    \n",*tampon);
-  valeur = *tampon >> (taille_act - 8);
+  valeur = *tampon >> 24;
   // printf("\n\n affichage de valeur : %x    \n",valeur);
-  *tampon = *tampon & ~(valeur << (taille_act - 8));
+  *tampon = *tampon & (0x00FFFFFF);
   // printf("\n\n affichage de tampon : %x    \n",*tampon);
+  *tampon = *tampon << 8;
   return valeur;
 }
 
 
-// Complétion puis affichage
-uint8_t Completion(uint32_t *tampon, int taille_act){
-  uint8_t valeur;
-  printf("\n ---- Padding : %d \n", 8 - taille_act);
-  valeur = *tampon << (32 - taille_act);
-  return valeur;
-}
+// // Complétion puis affichage
+// uint8_t Completion(uint32_t *tampon, int taille_act){
+//   uint8_t valeur;
+//   printf("\n ---- Padding : %d \n", 8 - taille_act);
+//   valeur = *tampon << (32 - taille_act);
+//   return valeur;
+// }

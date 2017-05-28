@@ -33,7 +33,7 @@ void decodage (char* fichier,char* sortie){
   Code wc;
   Dico D;
   Initialiser(&D);
-  int* w, *x, *a;
+  int* w, *x = NULL, *a;
   FILE *e = NULL;
   FILE *s = NULL;
   e = fopen(fichier, "r");
@@ -60,7 +60,7 @@ void decodage (char* fichier,char* sortie){
       }
       printf("cherche %d, appart : %i\n", j, Appartient(D,j)>0);
       if (Appartient(D,j)>0){
-        x = malloc(D.dict[j].longueur*sizeof(int));
+        x = realloc(x, D.dict[j].longueur*sizeof(int));
         for(int k=0; k<D.dict[j].longueur; k++)
           x[k] = D.dict[j].code[k];
         ecriture(s,x,D.dict[j].longueur);
@@ -69,14 +69,14 @@ void decodage (char* fichier,char* sortie){
         wc = SequenceVersCode(w,D.dict[i].longueur);
         Inserer(&D,wc,ac);
         i = j;
-        w = malloc(D.dict[i].longueur*sizeof(int));
+        w = realloc(w, D.dict[i].longueur*sizeof(int));
         for(int k=0; k<D.dict[i].longueur; k++)
           w[k] = D.dict[i].code[k];
       }else{
         // x = malloc((D.dict[i].longueur+1)*sizeof(int));
         // for(int k=0; k<D.dict[i].longueur; k++)
         //   x[k] = D.dict[i].code[k];
-        x = malloc((D.dict[i].longueur+1)*sizeof(int));
+        x = realloc(x, (D.dict[i].longueur+1)*sizeof(int));
         for(int k=0; k<D.dict[i].longueur; k++)
           x[k] = D.dict[i].code[k];
         x = concat(x, D.dict[i].longueur, a, 1);
