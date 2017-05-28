@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NBMAXSEQ 512
+#define NBMAXSEQ 2000
 
 
 void Initialiser(Dico *dico){
