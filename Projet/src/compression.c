@@ -103,7 +103,6 @@ while ( !feof(fp) ){
 				fprintf(result,"%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			}
 
-
 //		//_____________________________________________________________________-----------------------------------
 
 		// fprintf(result,"%d ",sortie);
@@ -115,8 +114,6 @@ while ( !feof(fp) ){
 		// 	fprintf(result, "%d\n",element(dico,256,0));
 			Initialiser(&dico);
 		}
-
-
 		//On replace w sur le dernier caractère lu
 		wlength = 1;
 		w = realloc (w, wlength * sizeof (int) ) ;
@@ -126,7 +123,6 @@ while ( !feof(fp) ){
 
 //Affichage de l'indice dans le fichier de sortie  uint8_t Retrait(uint32_t *tampon, int taille_act){   void Ajout(int ind, uint32_t *tampon, int taille){
 if(nb_bits_restant != 32){
-
 	sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
 	fprintf(result,"%c", sortie_hexa); //%c pour les chars (d'après Servan)
 }
