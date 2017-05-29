@@ -26,11 +26,9 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 	int retour = -42;
 	
 	while((i < nombre_cles_arbre(dico)) && (retour < 0)){
-		// printf("etat : %i dic[%i] = %i\n", i, i, dico.dict[i].code[0]);
 		if(rechercher_cle_arbre(dico,i)->longueur == prefixe.longueur){
 			int idem=1;
 			for(int j = 0; j<prefixe.longueur; j++){
-				// printf("dico : %c ; pref : %c\n", dico.dict[i].code[j], prefixe.code[j]);
 				idem = idem && (rechercher_cle_arbre(dico,i)->code[j] == prefixe.code[j]);
 			}
 			if(idem)
@@ -39,47 +37,31 @@ int Chercher(Dico dico, Code prefixe, Code mono){
 		i++;
 	}
 	while((i < nombre_cles_arbre(dico)) && (retour >= 0)){
-		// printf("lg : %i, %i\n", rechercher_cle_arbre(dico,i)->longueur, prefixe.longueur);
-		// printf("long du pref : %i\n", prefixe.longueur);
-		// printf("lond de lele %i : %i\n", i, rechercher_cle_arbre(dico,i)->longueur);
 		if(rechercher_cle_arbre(dico,i)->longueur == prefixe.longueur+1){
-			// printf("OUIOUIOUI\n");
 			int idem=1;
 			for(int j = 0; j < prefixe.longueur; j++){
 				idem = idem && (prefixe.code[j] == rechercher_cle_arbre(dico,i)->code[j]);
 			}
-			// printf("idem : %i\n", idem);
 			idem = idem && (rechercher_cle_arbre(dico,i)->code[prefixe.longueur] == mono.code[0]);
-			// printf("idem : %i\n", idem);
 
 			if(idem)
 				retour = -1;
 		}
 		i++;
 	}
-	// printf("retour : %i\n", retour);
 	return retour;
 }
 
-// Fonction de décalage à droite à partir de l'indice
-// void Decalage(Dico *dictio, int ind){
-// 	int i;
-// 	for(i=dictio->nbseq - 1; i >= ind; i--) {
-// 		dictio->dict[i+1] = dictio->dict[i];
-// 	}
-// }
 
 // Fusion des deux codes pour former un code : prefixe-mono.
 void Fusion(Code prefixe, Code mono, Code *retour){
 	int i;
-	// Code fusion;
 	retour->code = malloc((prefixe.longueur+1)*sizeof(int));
 	for(i=0; i<prefixe.longueur; i++) {
 		retour->code[i] = prefixe.code[i];
 	}
 	retour->code[prefixe.longueur] = mono.code[0];
 	retour->longueur = prefixe.longueur + 1;
-	// printf("len : %i\n", retour->longueur);
 }
 
 
@@ -100,10 +82,7 @@ int Inserer(Dico *dictio, Code prefixe, Code mono){
 	}
 	else {
 		Fusion(prefixe,mono,&fusion);
-		// printf("nbc : %i\n", nombre_cles_arbre(*dictio));
 		*dictio = ajouter_Code(*dictio, cle_max(*dictio)+1, fusion.code, fusion.longueur);
-		// printf("leeeeeen : %i\n",fusion.longueur);
-		// printf("but len : %i\n", rechercher_cle_arbre(*dictio, cle_max(*dictio))->longueur);
 		if(nombre_cles_arbre(*dictio) >= NBMAXSEQ) {
 			Initialiser(dictio);
 		}
