@@ -7,10 +7,6 @@
 
 int main(int argc, char *argv[]){
 
-	//FILE *f = NULL;
-	//char langue = 'F';
-	//int lectFich = 0, HELP = 0;
-
 	if((argc > 1) && (argv[1][0]=='-')){
 		switch(argv[1][1]){
 			case('h'):
