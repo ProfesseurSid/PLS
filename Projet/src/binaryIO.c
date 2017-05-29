@@ -43,11 +43,8 @@ void Ajout(int ind, uint32_t *tampon, int *nb_bits_restant, Dico dico){
 // Finalement, on replace la suite de bit en poids fort.
 uint8_t Retrait(uint32_t *tampon, int *nb_bits_restant, Dico dico){
   uint8_t valeur;
-// printf("\n\n affichage de tampon initial: %x    \n",*tampon);
   valeur = *tampon >> 24;
-  // printf("\n\n affichage de valeur : %x    \n",valeur);
   *tampon = *tampon & (0x00FFFFFF);
-  // printf("\n\n affichage de tampon : %x    \n",*tampon);
   *tampon = *tampon << 8;
 
   nb_bits_restant += nb_bits_requis(dico);
@@ -55,10 +52,11 @@ uint8_t Retrait(uint32_t *tampon, int *nb_bits_restant, Dico dico){
 }
 
 
-// // Complétion puis affichage
-// uint8_t Completion(uint32_t *tampon, int taille_act){
-//   uint8_t valeur;
-//   printf("\n ---- Padding : %d \n", 8 - taille_act);
-//   valeur = *tampon << (32 - taille_act);
-//   return valeur;
-// }
+
+int Retrait_decompression(uint32_t *tampon, int *nb_bits_restant, Dico dico){
+  uint8_t valeur;
+  valeur = *tampon >> (32-nb_bits_requis(dico));
+  *tampon = *tampon << nb_bits_requis(dico);
+  nb_bits_restant += nb_bits_requis(dico);
+  return valeur;
+}

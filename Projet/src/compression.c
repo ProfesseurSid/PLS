@@ -65,6 +65,7 @@ w = malloc ( wlength * sizeof (int) ) ;
 //Création et ouverture du fichier de sortie.
 FILE* result;
 result = fopen(result_compress,"w");
+
 //Tant que la fin du fichier n'est pas atteinte :
 while ( !feof(fp) ){
 
@@ -72,7 +73,6 @@ while ( !feof(fp) ){
 	a = fgetc(fp);
 	prefix = SequenceVersCode(w,wlength);
 	mono = SequenceVersCode(&a,1);
-	// printf("recherche : %c, taille : %i, tailleprefix : %i, taillemono : %i\n", w[0], wlength, prefix.longueur, mono.longueur);            // TRACE
 	sortie = Chercher(dico , prefix , mono );
 
 	//Si préfixe+mono est présent dans le dictionnaire
@@ -80,44 +80,26 @@ while ( !feof(fp) ){
 
 		//On ralonge le préfixe.
 		int* temp = malloc((wlength+1)*sizeof(int));
-		// memcpy(temp,w,wlength-1);
+
 		for(int l=0; l<wlength; l++)
 			temp[l] = w[l];
-		// *( temp + wlength-1 ) = a;
+
 		temp[wlength] = a;
 		wlength++;
 		w = temp;
-		// printf("on augmente\n");     // TRACE
-		// free(temp);
-
 	}
 
 	else {
 		//Affichage de l'indice dans le fichier de sortie
 
-//		// PARTIE BINARYIO !!!!!!!!!!!!!!!!! A RAJOUTER (SECONDE A LA FIN DU CODE) ___________________________________________________------------------------------------
-
-			Ajout(sortie, &tampon, &nb_bits_restant);
-			sortie_hexa = Retrait(&tampon);
-			nb_bits_restant += 8;
+			Ajout(sortie, &tampon, &nb_bits_restant, dico);
+			sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
+			nb_bits_restant += 11;
 			printf("%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			if(nb_bits_restant < 23){
-				sortie_hexa = Retrait(&tampon);
-				nb_bits_restant += 8;
+				sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
 				printf("%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			}
-
-//		//_____________________________________________________________________-----------------------------------
-
-		fprintf(result,"%d ",sortie);
-		// fprintf(result," ");
-
-
-		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
-		if ( !Inserer( &dico , prefix , mono) ) {
-			fprintf(result, "%d\n",dico.dict[256].code[0]);
-			Initialiser(&dico);
-		}
 
 		//On replace w sur le dernier caractère lu
 		wlength = 1;
@@ -126,19 +108,11 @@ while ( !feof(fp) ){
 	}
 }
 
-
 //Affichage de l'indice dans le fichier de sortie  uint8_t Retrait(uint32_t *tampon, int taille_act){   void Ajout(int ind, uint32_t *tampon, int taille){
-							// ?????????????????????????????????????????????
-fprintf(result,"%d",sortie);      //      < ========================== Sûrement de trop, on le ferai deux fois si on le compte non?
-							// ?????????????????????????????????????????????
-
-// ---------------------------------------------------- SECONDE PARTIE A RAJOUTER
 if(nb_bits_restant != 32){
 	sortie_hexa = Retrait(&tampon);
 	printf("%c", sortie_hexa); //%c pour les chars (d'après Servan)
 }
-// -----------------------------------------------------------------------------------FIN BINARYIO
-
 
 //Fin des opérations. Fermeture des fichiers.
 fclose(result);
