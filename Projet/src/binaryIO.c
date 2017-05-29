@@ -2,21 +2,11 @@
 #include <stdlib.h>
 #include "binaryIO.h"
 
-// Calcul le nombre de bit nécessaire pour coder ind
-int Taille(int ind){
-  int taille = 1;
-  int total = 1;
-  while(total*2<ind){
-    taille ++;
-    total *= 2;
-  }
-  return taille;
-}
-
+// Calcul le nombre de bit nécessaire pour coder une sequence
 int nb_bits_requis(Dico dico){
   static int puiss = 0;
   static int nb = 1;
-  while(nb < nombre_cles_arbre(dico)){
+  while(nb < cle_max(dico)){
     puiss++;
     nb *= 2;
   }
@@ -47,7 +37,7 @@ uint8_t Retrait(uint32_t *tampon, int *nb_bits_restant, Dico dico){
   *tampon = *tampon & (0x00FFFFFF);
   *tampon = *tampon << 8;
 
-  nb_bits_restant += nb_bits_requis(dico);
+  *nb_bits_restant += 8;
   return valeur;
 }
 

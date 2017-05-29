@@ -26,8 +26,13 @@ void compression(char* f,char* result_compress) {
 
 uint8_t sortie_hexa;
 uint32_t tampon = 0;
+<<<<<<< HEAD
+int nb_bits_restant = 3;
+int* w = NULL;
+=======
 int nb_bits_restant = 32;
 int* w;
+>>>>>>> 9c704c33d0f3625ee96ec2d2170c64b1d1d69a24
 int a;
 //La longueur du mot courant
 int wlength=1;
@@ -94,24 +99,46 @@ while ( !feof(fp) ){
 
 			Ajout(sortie, &tampon, &nb_bits_restant, dico);
 			sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
-			nb_bits_restant += 11;
-			printf("%c",sortie_hexa); //%c pour les chars (d'après Servan)
-			if(nb_bits_restant < 23){
+			// nb_bits_restant += 8;
+			fprintf(result,"%c",sortie_hexa); //%c pour les chars (d'après Servan)
+			// printf("%i -- %i\n", nb_bits_requis(dico), cle_max(dico));
+			if(nb_bits_restant < nb_bits_requis(dico)){
 				sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
-				printf("%c",sortie_hexa); //%c pour les chars (d'après Servan)
+				// nb_bits_restant += 11;
+				fprintf(result,"%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			}
 
+<<<<<<< HEAD
+//		//_____________________________________________________________________-----------------------------------
+
+		// fprintf(result,"%d ",sortie);
+		// fprintf(result," ");
+
+
+		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
+		if ( !Inserer( &dico , prefix , mono) ) {
+		// 	fprintf(result, "%d\n",element(dico,256,0));
+			Initialiser(&dico);
+		}
+
+=======
+>>>>>>> 9c704c33d0f3625ee96ec2d2170c64b1d1d69a24
 		//On replace w sur le dernier caractère lu
 		wlength = 1;
-		w = malloc ( wlength * sizeof (int) ) ;
+		w = realloc (w, wlength * sizeof (int) ) ;
 		w[0] = a;
 	}
 }
 
 //Affichage de l'indice dans le fichier de sortie  uint8_t Retrait(uint32_t *tampon, int taille_act){   void Ajout(int ind, uint32_t *tampon, int taille){
 if(nb_bits_restant != 32){
+<<<<<<< HEAD
+	sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
+	fprintf(result,"%c", sortie_hexa); //%c pour les chars (d'après Servan)
+=======
 	sortie_hexa = Retrait(&tampon);
 	printf("%c", sortie_hexa); //%c pour les chars (d'après Servan)
+>>>>>>> 9c704c33d0f3625ee96ec2d2170c64b1d1d69a24
 }
 
 //Fin des opérations. Fermeture des fichiers.
