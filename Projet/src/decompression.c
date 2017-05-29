@@ -24,6 +24,7 @@ int* concat(int* a, int longa, int* b, int longb) {
 
 void ecriture(FILE* s,int* c,int longc) {
   for (int i = 0; i<longc; i++) {
+    printf("%c", c[i]);
     fputc(c[i],s);
   }
 }
@@ -32,7 +33,7 @@ void decodage (char* fichier,char* sortie) {
   uint32_t tampon = 0;
   // int lecture;
   int nb_bits_restant = 32;
-  int i;
+  char i;
   char j;
   Code ac;
   Code wc;
@@ -45,39 +46,39 @@ void decodage (char* fichier,char* sortie) {
 
   if (e != NULL) {
 
-    fscanf(e,"%d",&i);
-
+    fscanf(e,"%c",&i);
     s = fopen(sortie,"w");
-    a = malloc(longueur(D,i)*sizeof(int));
-
-    for(int k=0; k<longueur(D,i); k++)
+    a = malloc(longueur(D,(int) i)*sizeof(int));
+    printf("I =        %d", (int) i);
+    for(int k=0; k<longueur(D,(int)i); k++)
       a[k] = element(D,i,k);
 
-    w = malloc(longueur(D,i)*sizeof(int));
+    w = malloc(longueur(D,(int)i)*sizeof(int));
 
-    for(int k=0; k<longueur(D,i); k++){
+    for(int k=0; k<longueur(D,(int)i); k++){
       w[k] = a[k];
     }
-
-    ecriture(s,w,longueur(D,i));
+    ecriture(s,w,longueur(D,(int)i));
 
     while (!feof(e)) {
-      printf("OUI\n");
       fscanf(e,"%c",&j);
-      Ajout(j, &tampon, &nb_bits_restant, D);
+      Ajout_decompression(j, &tampon, &nb_bits_restant, D);
+      printf("NB BITS RESTANTS : %d \n", nb_bits_restant);
       if(nb_bits_requis(D) - (32 - nb_bits_restant) > 0){
         fscanf(e,"%c",&j);
-        Ajout(j, &tampon,&nb_bits_restant, D);
+        Ajout_decompression(j, &tampon,&nb_bits_restant, D);
         j = Retrait_decompression(&tampon, &nb_bits_restant,D);
-        printf("J : %i\n", j);
+      }
+      else{
+        j = Retrait_decompression(&tampon,&nb_bits_restant,D);
       }
       if (Appartient(D,j)>0) {
         x = realloc(x, longueur(D,j)*sizeof(int));
 
         for(int k=0; k<longueur(D,j); k++)
-          x[k] = element(D,j,k);
+          x[k] = element(D,(int) j,k);
 
-        ecriture(s,x,longueur(D,j));
+        ecriture(s,x,longueur(D,(int) j));
         a[0] = x[0];
         ac = SequenceVersCode(a,1);
         wc = SequenceVersCode(w,longueur(D,i));

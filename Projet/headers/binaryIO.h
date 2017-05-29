@@ -16,6 +16,8 @@ uint8_t Retrait(uint32_t *tampon, int *nb_bits_restant, Dico dico);
 // uint8_t Completion(uint32_t *tampon, int taille_act);
 int nb_bits_requis(Dico dico);
 
+void Ajout_decompression(int ind, uint32_t *tampon, int *nb_bits_restant, Dico dico);
+
 int Retrait_decompression(uint32_t *tampon, int *nb_bits_restant, Dico dico);
 
 #endif

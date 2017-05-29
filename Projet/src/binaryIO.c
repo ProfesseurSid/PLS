@@ -36,17 +36,24 @@ uint8_t Retrait(uint32_t *tampon, int *nb_bits_restant, Dico dico){
   valeur = *tampon >> 24;
   *tampon = *tampon & (0x00FFFFFF);
   *tampon = *tampon << 8;
-
   *nb_bits_restant += 8;
   return valeur;
 }
 
+void Ajout_decompression(int ind, uint32_t *tampon, int *nb_bits_restant, Dico dico){
+  *tampon = *tampon >> (*nb_bits_restant - 8);
+  *tampon = *tampon | (uint32_t) ind;
+  *nb_bits_restant -= 8;
+  *tampon = *tampon << (*nb_bits_restant);
+}
 
 
 int Retrait_decompression(uint32_t *tampon, int *nb_bits_restant, Dico dico){
-  uint8_t valeur;
-  valeur = *tampon >> (32-nb_bits_requis(dico));
-  *tampon = *tampon << nb_bits_requis(dico);
-  nb_bits_restant += nb_bits_requis(dico);
-  return valeur;
+  uint32_t valeur;
+  int bits = nb_bits_requis(dico);
+  valeur = *tampon >> (32-bits);
+  // *tampon = *tampon && ~(valeur << (32 - bits));
+  *tampon = *tampon << bits;
+  *nb_bits_restant += bits;
+  return (int) valeur;
 }
