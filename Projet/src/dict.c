@@ -24,7 +24,6 @@ void Initialiser(Dico *dico){
 int Chercher(Dico dico, Code prefixe, Code mono){
 	int i=0;
 	int retour = -42;
-	
 	while((i < nombre_cles_arbre(dico)) && (retour < 0)){
 		// printf("etat : %i dic[%i] = %i\n", i, i, dico.dict[i].code[0]);
 		if(rechercher_cle_arbre(dico,i)->longueur == prefixe.longueur){
@@ -92,7 +91,7 @@ void Fusion(Code prefixe, Code mono, Code *retour){
 // 1 : le code a été rajouté dans le dico
 
 
-// Changer pour renvoie code peut être. 
+// Changer pour renvoie code peut être.
 int Inserer(Dico *dictio, Code prefixe, Code mono){
 	Code fusion;
 	if(Chercher(*dictio,prefixe,mono) < 0) {
