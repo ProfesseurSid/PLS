@@ -1,14 +1,14 @@
-#include "dict.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-
+#include "dict.h"
+#include "decompression.h"
 
 
 
 int* concat(int* a, int longa, int* b, int longb){
   int* c = malloc((longa+longb)*sizeof(int));
-  printf("\n\nTRACE\n");
+  // printf("\n\nTRACE\n");
   for (int i = 0; i < longa; i++){
     printf("%d - ", a[i]);
     c[i] = a[i];
@@ -41,61 +41,61 @@ void decodage (char* fichier,char* sortie){
     fscanf(e,"%d",&i);
 
     s = fopen(sortie,"w");
-    a = malloc(D.dict[i].longueur*sizeof(int));
-    for(j=0; j<D.dict[i].longueur; j++)
-      a[j] = D.dict[i].code[j];
-    w = malloc(D.dict[i].longueur*sizeof(int));
-    for(j=0; j<D.dict[i].longueur; j++){
+    a = malloc(longueur(D,i)*sizeof(int));
+    for(j=0; j<longueur(D,i); j++)
+      a[j] = element(D,i,j);
+    w = malloc(longueur(D,i)*sizeof(int));
+    for(j=0; j<longueur(D,i); j++){
 
       w[j] = a[j];
     }
     //fputs(w,s); FONCTION DECRITURE CARAC PAR CARAC
-    ecriture(s,w,D.dict[i].longueur);
+    ecriture(s,w,longueur(D,i));
 
     while (!feof(e)){
       fscanf(e,"%d",&j);
-      if (j==256){
-          Initialiser(&D);
-          fscanf(e,"%d",&j);
-      }
-      printf("cherche %d, appart : %i\n", j, Appartient(D,j)>0);
+      // if (j==256){
+      //     Initialiser(&D);
+      //     fscanf(e,"%d",&j);
+      // }
+      // printf("cherche %d, appart : %i\n", j, Appartient(D,j)>0);
       if (Appartient(D,j)>0){
-        x = realloc(x, D.dict[j].longueur*sizeof(int));
-        for(int k=0; k<D.dict[j].longueur; k++)
-          x[k] = D.dict[j].code[k];
-        ecriture(s,x,D.dict[j].longueur);
+        x = realloc(x, longueur(D,j)*sizeof(int));
+        for(int k=0; k<longueur(D,j); k++)
+          x[k] = element(D,j,k);
+        ecriture(s,x,longueur(D,j));
         a[0] = x[0];
         ac = SequenceVersCode(a,1);
-        wc = SequenceVersCode(w,D.dict[i].longueur);
+        wc = SequenceVersCode(w,longueur(D,i));
         Inserer(&D,wc,ac);
         i = j;
-        w = realloc(w, D.dict[i].longueur*sizeof(int));
-        for(int k=0; k<D.dict[i].longueur; k++)
-          w[k] = D.dict[i].code[k];
+        w = realloc(w, longueur(D,i)*sizeof(int));
+        for(int k=0; k<longueur(D,i); k++)
+          w[k] = element(D,i,k);
       }else{
-        // x = malloc((D.dict[i].longueur+1)*sizeof(int));
-        // for(int k=0; k<D.dict[i].longueur; k++)
-        //   x[k] = D.dict[i].code[k];
-        x = realloc(x, (D.dict[i].longueur+1)*sizeof(int));
-        for(int k=0; k<D.dict[i].longueur; k++)
-          x[k] = D.dict[i].code[k];
-        x = concat(x, D.dict[i].longueur, a, 1);
+        // x = malloc((longueur(D,i)+1)*sizeof(int));
+        // for(int k=0; k<longueur(D,i); k++)
+        //   x[k] = element(D,i,k);
+        x = realloc(x, (longueur(D,i)+1)*sizeof(int));
+        for(int k=0; k<longueur(D,i); k++)
+          x[k] = element(D,i,k);
+        x = concat(x, longueur(D,i), a, 1);
 
-        ecriture(s,x,D.dict[i].longueur+1);
+        ecriture(s,x,longueur(D,i)+1);
         a[0] = x[0];
         ac = SequenceVersCode(a,1);
-        wc = SequenceVersCode(w,D.dict[i].longueur);
+        wc = SequenceVersCode(w,longueur(D,i));
         Inserer(&D,wc,ac);
         i = j;
-        for(int k=0; k<D.dict[i].longueur; k++)
-          w[k] = D.dict[i].code[k];
+        for(int k=0; k<longueur(D,i); k++)
+          w[k] = element(D,i,k);
       }
       // fputs(x,s); FONCTION DECRITURE CARAC PAR CARAC
-      // ecriture(s,x,D.dict[i].longueur+1);
+      // ecriture(s,x,longueur(D,i)+1);
       // Inserer(&D,wc,ac);
       // i = j;
-      // for(int k=0; i<D.dict[i].longueur; k++)
-      //   w[k] = D.dict[i].code[k];
+      // for(int k=0; i<longueur(D,i); k++)
+      //   w[k] = element(D,i,k);
     }
     fclose(e);
     fclose(s);

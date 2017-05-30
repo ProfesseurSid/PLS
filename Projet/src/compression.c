@@ -1,6 +1,7 @@
-LL#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "compression.h"
 #include "dict.h"
 #include "binaryIO.h"
 
@@ -26,7 +27,7 @@ void compression(char* f,char* result_compress) {
 
 uint8_t sortie_hexa;
 uint32_t tampon = 0;
-int nb_bits_restant = 32;
+int nb_bits_restant = 3;
 int* w;
 int a;
 //La longueur du mot courant
@@ -97,27 +98,27 @@ while ( !feof(fp) ){
 
 //		// PARTIE BINARYIO !!!!!!!!!!!!!!!!! A RAJOUTER (SECONDE A LA FIN DU CODE) ___________________________________________________------------------------------------
 
-			Ajout(sortie, &tampon, &nb_bits_restant);
-			sortie_hexa = Retrait(&tampon);
-			nb_bits_restant += 8;
+			Ajout(sortie, &tampon, &nb_bits_restant, dico);
+			sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
+			nb_bits_restant += 11;
 			printf("%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			if(nb_bits_restant < 23){
-				sortie_hexa = Retrait(&tampon);
-				nb_bits_restant += 8;
+				sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
+				// nb_bits_restant += 11;
 				printf("%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			}
 
 //		//_____________________________________________________________________-----------------------------------
 
-		fprintf(result,"%d ",sortie);
+		// fprintf(result,"%d ",sortie);
 		// fprintf(result," ");
 
 
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
-		if ( !Inserer( &dico , prefix , mono) ) {
-			fprintf(result, "%d\n",dico.dict[256].code[0]);
-			Initialiser(&dico);
-		}
+		// if ( !Inserer( &dico , prefix , mono) ) {
+		// 	fprintf(result, "%d\n",element(dico,256,0));
+		// 	Initialiser(&dico);
+		// }
 
 		//On replace w sur le dernier caractère lu
 		wlength = 1;
@@ -129,12 +130,12 @@ while ( !feof(fp) ){
 
 //Affichage de l'indice dans le fichier de sortie  uint8_t Retrait(uint32_t *tampon, int taille_act){   void Ajout(int ind, uint32_t *tampon, int taille){
 							// ?????????????????????????????????????????????
-fprintf(result,"%d",sortie);      //      < ========================== Sûrement de trop, on le ferai deux fois si on le compte non?
+// fprintf(result,"%d",sortie);      //      < ========================== Sûrement de trop, on le ferai deux fois si on le compte non?
 							// ?????????????????????????????????????????????
 
 // ---------------------------------------------------- SECONDE PARTIE A RAJOUTER
 if(nb_bits_restant != 32){
-	sortie_hexa = Retrait(&tampon);
+	sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
 	printf("%c", sortie_hexa); //%c pour les chars (d'après Servan)
 }
 // -----------------------------------------------------------------------------------FIN BINARYIO

@@ -1,15 +1,7 @@
 #ifndef _DICT_H
 #define _DICT_H
 
-typedef struct{
-	int *code;		// la chaine en question
-	int longueur;	// la longueur de la chaine
-} Code;
-
-typedef struct{
-	Code *dict;
-	int nbseq;
-}Dico;
+#include "avl.h"
 
 void Initialiser(Dico *dico);
 void Decalage(Dico *dictio, int ind);
@@ -20,5 +12,7 @@ int *CodeVersChaine(Code code);
 void CopyVersCode(Code new_code, int *seq);
 Code SequenceVersCode(int *sequence, int longueur);
 int Appartient(Dico dictio, int ind);
+int longueur(Dico dictio, int ind);
+int element(Dico dictio, int ind, int elem);
 
 #endif

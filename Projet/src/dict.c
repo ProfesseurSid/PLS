@@ -1,24 +1,22 @@
 #include "dict.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "avl.h"
 
 #define NBMAXSEQ 512
 
-
 void Initialiser(Dico *dico){
-	dico->dict = malloc(NBMAXSEQ*sizeof(int));
-	for(int i=0; i<=256; i++){
-		dico->dict[i].code = malloc(sizeof(int));
-		dico->dict[i].code[0] = i;
-		dico->dict[i].longueur = 1;
+	*dico = realloc (*dico, sizeof(Code)) ;
+    (*dico)->cle = 0;
+    (*dico)->longueur = 1;
+    (*dico)->code = malloc(sizeof(int));
+    (*dico)->code[0] = 0;
+    (*dico)->fgauche = NULL ;
+    (*dico)->fdroite = NULL ;
+    (*dico)->bal = 0 ;
+	for(int i=1; i<=255; i++){
+		*dico = ajouter_Code(*dico, i, &i, 1);
 	}
-	for(int i=0; i<256; i++){
-		dico->dict[i].code = malloc(sizeof(int));
-		dico->dict[i].code[0] = i;
-	}
-	for(int i=257; i<NBMAXSEQ; i++)
-		dico->dict[i].longueur = 0;
-	dico->nbseq = 257;
 }
 
 /* cherche la chaine prefixe+mono dans le tableau. */
@@ -26,84 +24,50 @@ void Initialiser(Dico *dico){
 int Chercher(Dico dico, Code prefixe, Code mono){
 	int i=0;
 	int retour = -42;
-	// while((i < NBMAXSEQ) && (dico.dict[i].longueur < prefixe.longueur) && (dico.dict[i].longueur > 0)){
-	// 	i++;
-	// }
-	// while((i < NBMAXSEQ) && (retour < 0) && (dico.dict[i].longueur < prefixe.longueur+1) && (dico.dict[i].longueur > 0)){
-	// 	for(j=0; (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j]); j++){}
-	// 	if(j == dico.dict[i].longueur)
-	// 		retour = i;
-	// 	i++;
-	// }
-
-	// while((i < NBMAXSEQ) && (dico.dict[i].longueur < prefixe.longueur+1) && (dico.dict[i].longueur > 0)){
-	// 	i++;
-	// }
-	// while((i < NBMAXSEQ) && (retour >= 0) && (dico.dict[i].longueur < prefixe.longueur+2) && (dico.dict[i].longueur > 0)){
-	// 	for(j=0; (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j]); j++){}
-	// 	if((j == dico.dict[i].longueur) && (dico.dict[i].code[j] == mono.code[0]))
-	// 		retour = -1;
-	// 	i++;
-	// }
-
-	while((i < dico.nbseq) && (retour < 0)){
+	
+	while((i < nombre_cles_arbre(dico)) && (retour < 0)){
 		// printf("etat : %i dic[%i] = %i\n", i, i, dico.dict[i].code[0]);
-		// for(j=0; (prefixe.longueur == dico.dict[i].longueur) && (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j]); j++){}
-		// if(j == dico.dict[i].longueur)
-		// 	retour = i;
-		if(dico.dict[i].longueur == prefixe.longueur){
+		if(rechercher_cle_arbre(dico,i)->longueur == prefixe.longueur){
 			int idem=1;
 			for(int j = 0; j<prefixe.longueur; j++){
 				// printf("dico : %c ; pref : %c\n", dico.dict[i].code[j], prefixe.code[j]);
-				idem = idem && (dico.dict[i].code[j] == prefixe.code[j]);
+				idem = idem && (rechercher_cle_arbre(dico,i)->code[j] == prefixe.code[j]);
 			}
 			if(idem)
 				retour = i;
 		}
 		i++;
 	}
-	while((i < dico.nbseq) && (retour >= 0)){
-		// for(j=0; (prefixe.longueur == dico.dict[i].longueur-1) && (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j]); j++){}
-		// j = 0;
-		// while((prefixe.longueur == dico.dict[i].longueur-1) && (j < dico.dict[i].longueur) && (dico.dict[i].code[j] == prefixe.code[j])){
-		// 	printf("prefixe : %c ; dic : %c ; diclen : %i\n", prefixe.code[j], dico.dict[i].code[j], dico.dict[i].longueur);
-		// 	j++;
-		// }
-		// if((j == dico.dict[i].longueur-1)){
-		// 	printf("prefixe+mono : ");
-		// 	for(int l = 0; l<prefixe.longueur; l++)
-		// 		printf("%c", prefixe.code[l]);
-		// 	printf("%c\n", mono.code[0]);
-		// 	printf("dico : ");
-		// 	for(int l = 0; l<dico.dict[i].longueur; l++)
-		// 		printf("%c", dico.dict[i].code[l]);
-		// 	printf(" ; diclen : %i\n", dico.dict[i].longueur);
-		// }
-		// if((j == dico.dict[i].longueur) && (dico.dict[i].code[j] == mono.code[0]))
-		// 	retour = -1;
-		if(dico.dict[i].longueur == prefixe.longueur+1){
+	while((i < nombre_cles_arbre(dico)) && (retour >= 0)){
+		// printf("lg : %i, %i\n", rechercher_cle_arbre(dico,i)->longueur, prefixe.longueur);
+		// printf("long du pref : %i\n", prefixe.longueur);
+		// printf("lond de lele %i : %i\n", i, rechercher_cle_arbre(dico,i)->longueur);
+		if(rechercher_cle_arbre(dico,i)->longueur == prefixe.longueur+1){
+			// printf("OUIOUIOUI\n");
 			int idem=1;
 			for(int j = 0; j < prefixe.longueur; j++){
-				idem = idem && (prefixe.code[j] == dico.dict[i].code[j]);
+				idem = idem && (prefixe.code[j] == rechercher_cle_arbre(dico,i)->code[j]);
 			}
-			idem = idem && (dico.dict[i].code[prefixe.longueur] == mono.code[0]);
+			// printf("idem : %i\n", idem);
+			idem = idem && (rechercher_cle_arbre(dico,i)->code[prefixe.longueur] == mono.code[0]);
+			// printf("idem : %i\n", idem);
 
 			if(idem)
 				retour = -1;
 		}
 		i++;
 	}
-	// printf("retour : %i\n", retour);   // TRACE
+	// printf("retour : %i\n", retour);
 	return retour;
 }
 
 // Fonction de décalage à droite à partir de l'indice
-void Decalage(Dico *dictio, int ind){
-	int i;
-	for(i=dictio->nbseq - 1; i >= ind; i--) {
-		dictio->dict[i+1] = dictio->dict[i];
-	}
-}
+// void Decalage(Dico *dictio, int ind){
+// 	int i;
+// 	for(i=dictio->nbseq - 1; i >= ind; i--) {
+// 		dictio->dict[i+1] = dictio->dict[i];
+// 	}
+// }
 
 // Fusion des deux codes pour former un code : prefixe-mono.
 void Fusion(Code prefixe, Code mono, Code *retour){
@@ -115,7 +79,7 @@ void Fusion(Code prefixe, Code mono, Code *retour){
 	}
 	retour->code[prefixe.longueur] = mono.code[0];
 	retour->longueur = prefixe.longueur + 1;
-
+	// printf("len : %i\n", retour->longueur);
 }
 
 
@@ -124,30 +88,27 @@ void Fusion(Code prefixe, Code mono, Code *retour){
 
 // VALEUR DE RETOUR :
 // -1 : préfixe ou code déjà présent
-// 0 : Dico remplis de ses NBMAXSEQ valeurs
+// 0 : Dico rempli de ses NBMAXSEQ valeurs
 // 1 : le code a été rajouté dans le dico
 
 
-// Changer pour renvoie code peut être.
+// Changer pour renvoie code peut être. 
 int Inserer(Dico *dictio, Code prefixe, Code mono){
-	// int ind;
 	Code fusion;
-	// ind = 0;
 	if(Chercher(*dictio,prefixe,mono) < 0) {
 		return -1;
 	}
 	else {
-		// Decalage(dictio, ind);
 		Fusion(prefixe,mono,&fusion);
-		dictio->dict[dictio->nbseq] = fusion;
-		dictio->nbseq++;
-		if(dictio->nbseq < NBMAXSEQ) {
-			return 1;
-		}
-		else{
-			return 0;
+		// printf("nbc : %i\n", nombre_cles_arbre(*dictio));
+		*dictio = ajouter_Code(*dictio, cle_max(*dictio)+1, fusion.code, fusion.longueur);
+		// printf("leeeeeen : %i\n",fusion.longueur);
+		// printf("but len : %i\n", rechercher_cle_arbre(*dictio, cle_max(*dictio))->longueur);
+		if(nombre_cles_arbre(*dictio) >= NBMAXSEQ) {
+			Initialiser(dictio);
 		}
 	}
+	return 1;
 }
 
 int *CodeVersChaine(Code code){
@@ -169,14 +130,27 @@ Code SequenceVersCode(int *sequence, int longueur){
 	Code new_code;
 	new_code.code = malloc(longueur*sizeof(int));
 	new_code.longueur = longueur;
+	new_code.fgauche = NULL;
+	new_code.fdroite = NULL;
 	CopyVersCode(new_code, sequence);
 	return new_code;
 }
 
 
 int Appartient(Dico dictio, int ind){
-	if(ind<512){
-		return dictio.dict[ind].longueur;
-	}
-	else return -1;
+	return rechercher_cle_arbre(dictio,ind)!=NULL;
+}
+
+int longueur(Dico dictio, int ind){
+	if(rechercher_cle_arbre(dictio,ind) != NULL)
+		return rechercher_cle_arbre(dictio,ind)->longueur;
+	else
+		return 0;
+}
+
+int element(Dico dictio, int ind, int elem){
+	if(rechercher_cle_arbre(dictio,ind) != NULL)
+		return rechercher_cle_arbre(dictio,ind)->code[elem];
+	else
+		return -1;
 }
