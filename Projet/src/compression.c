@@ -100,12 +100,13 @@ while ( !feof(fp) ){
 
 			Ajout(sortie, &tampon, &nb_bits_restant, dico);
 			sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
-			nb_bits_restant += 11;
-			printf("%c",sortie_hexa); //%c pour les chars (d'après Servan)
-			if(nb_bits_restant < 23){
+			// nb_bits_restant += 8;
+			fprintf(result,"%c",sortie_hexa); //%c pour les chars (d'après Servan)
+			// printf("%i -- %i\n", nb_bits_requis(dico), cle_max(dico));
+			if(nb_bits_restant < nb_bits_requis(dico)){
 				sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
 				// nb_bits_restant += 11;
-				printf("%c",sortie_hexa); //%c pour les chars (d'après Servan)
+				fprintf(result,"%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			}
 
 //		//_____________________________________________________________________-----------------------------------
@@ -115,10 +116,10 @@ while ( !feof(fp) ){
 
 
 		//Si l'insertion échoue (dictionnaire plein) : Affichage d'un caractère spécial et réinitialisation du dictionnaire
-		// if ( !Inserer( &dico , prefix , mono) ) {
+		if ( !Inserer( &dico , prefix , mono) ) {
 		// 	fprintf(result, "%d\n",element(dico,256,0));
-		// 	Initialiser(&dico);
-		// }
+			Initialiser(&dico);
+		}
 
 		//On replace w sur le dernier caractère lu
 		wlength = 1;
@@ -136,7 +137,7 @@ while ( !feof(fp) ){
 // ---------------------------------------------------- SECONDE PARTIE A RAJOUTER
 if(nb_bits_restant != 32){
 	sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
-	printf("%c", sortie_hexa); //%c pour les chars (d'après Servan)
+	fprintf(result,"%c", sortie_hexa); //%c pour les chars (d'après Servan)
 }
 // -----------------------------------------------------------------------------------FIN BINARYIO
 

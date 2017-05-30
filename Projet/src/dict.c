@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "avl.h"
 
-#define NBMAXSEQ 512
+#define NBMAXSEQ 2048
 
 void Initialiser(Dico *dico){
 	*dico = realloc (*dico, sizeof(Code)) ;

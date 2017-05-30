@@ -25,18 +25,18 @@ int main(int argc, char *argv[]) {
 						printf("Give one or more file(s) to compress\n"); 
 					
 					//ajout d'extension
-					// for(int i=2; i<argc; i++) { 
+					for(int i=2; i<argc; i++) { 
 						char *sortie; 
-						int length = strlen(argv[2]); 
-						sortie = malloc((length+5)*sizeof(char)); 
-						strcpy(sortie, argv[2]); 
-						sortie[length] = '.'; 
-						sortie[length+1] = 'l'; 
-						sortie[length+2] = 'z'; 
-						sortie[length+3] = 'w'; 
-						sortie[length+4] = 0; 
-						compression(argv[2],sortie); 
-					// } 
+						int length = strlen(argv[i]);
+						sortie = malloc((length+5)*sizeof(char));
+						strcpy(sortie, argv[i]);
+						sortie[length] = '.';
+						sortie[length+1] = 'l';
+						sortie[length+2] = 'z';
+						sortie[length+3] = 'w';
+						sortie[length+4] = 0;
+						compression(argv[i],sortie);
+					}
 					break; 
 					
 				//DECOMPRESSION 
