@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "dict.h"
 #include "decompression.h"
+#include "binaryIO.h"
 
 
 int* concat(int* a, int longa, int* b, int longb) {
