@@ -25,26 +25,30 @@ int main(int argc, char *argv[]) {
 						printf("Give one or more file(s) to compress\n");
 
 					//ajout d'extension
+
 					for(int i=2; i<argc; i++) {
+						// printf("compression fichier %i.\r", i);
 						char *sortie;
 						int length = strlen(argv[i]);
 						sortie = malloc((length+5)*sizeof(char));
+						// printf("compression fichier %i ..\r", i);
 						strcpy(sortie, argv[i]);
 						sortie[length]   = '.';
 						sortie[length+1] = 'l';
 						sortie[length+2] = 'z';
 						sortie[length+3] = 'w';
 						sortie[length+4] =  0 ;
+						// printf("compression fichier %i ...\r", i);
 						compression(argv[i],sortie);
+						// printf("compression fichier %i ... done\n", i);
 						free(sortie);
-						// printf("\r");
 					}
 					break;
 
 				//DECOMPRESSION
 				case('d'):
 					if(argc < 3)
-						printf("Give one or more file(s) to decompress\n");
+						printf("Give one or more file(s) to decompress\n"); 
 
 					for(int i=2; i<argc; i++) {
 						char *sortie;
@@ -70,4 +74,5 @@ int main(int argc, char *argv[]) {
 		printf("Syntax error. Use -h for help.\n");
 
 	return 0;
-}
+
+

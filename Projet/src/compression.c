@@ -23,7 +23,8 @@ float Compression_Rate(char * f,char* fsor){
 
 void compression(char* f,char* result_compress) {
 
-printf("compression de");
+
+printf("compression de %s\n", f);
 
 
 uint8_t sortie_hexa;

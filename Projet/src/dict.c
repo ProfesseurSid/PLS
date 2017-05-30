@@ -154,7 +154,6 @@ int element(Dico dictio, int ind, int elem){
 		return -1;
 }
 
-// 
 int nombre_elements(Dico dictio){
 	return cle_max(dictio);
 }
