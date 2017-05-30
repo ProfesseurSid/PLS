@@ -2,17 +2,7 @@
 #include <stdlib.h>
 #include "binaryIO.h"
 
-// Calcul le nombre de bit nécessaire pour coder ind
-int Taille(int ind){
-  int taille = 1;
-  int total = 1;
-  while(total*2<ind){
-    taille ++;
-    total *= 2;
-  }
-  return taille;
-}
-
+// Calcul le nombre de bit nécessaire pour coder une sequence
 int nb_bits_requis(Dico dico){
   static int puiss = 0;
   static int nb = 1;
@@ -43,22 +33,10 @@ void Ajout(int ind, uint32_t *tampon, int *nb_bits_restant, Dico dico){
 // Finalement, on replace la suite de bit en poids fort.
 uint8_t Retrait(uint32_t *tampon, int *nb_bits_restant, Dico dico){
   uint8_t valeur;
-// printf("\n\n affichage de tampon initial: %x    \n",*tampon);
   valeur = *tampon >> 24;
-  // printf("\n\n affichage de valeur : %x    \n",valeur);
   *tampon = *tampon & (0x00FFFFFF);
-  // printf("\n\n affichage de tampon : %x    \n",*tampon);
   *tampon = *tampon << 8;
 
   *nb_bits_restant += 8;
   return valeur;
 }
-
-
-// // Complétion puis affichage
-// uint8_t Completion(uint32_t *tampon, int taille_act){
-//   uint8_t valeur;
-//   printf("\n ---- Padding : %d \n", 8 - taille_act);
-//   valeur = *tampon << (32 - taille_act);
-//   return valeur;
-// }
