@@ -40,3 +40,13 @@ uint8_t Retrait(uint32_t *tampon, int *nb_bits_restant, Dico dico){
   *nb_bits_restant += 8;
   return valeur;
 }
+
+
+
+int Retrait_decompression(uint32_t *tampon, int *nb_bits_restant, Dico dico){
+  uint8_t valeur;
+  valeur = *tampon >> (32-nb_bits_requis(dico));
+  *tampon = *tampon << nb_bits_requis(dico);
+  nb_bits_restant += nb_bits_requis(dico);
+  return valeur;
+}
