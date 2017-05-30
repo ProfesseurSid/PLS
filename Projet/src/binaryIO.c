@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include "binaryIO.h"
 
-// Calcul le nombre de bit nécessaire pour coder une sequence
-int nb_bits_requis(Dico dico){
+// Calcul le nombre de bit nécessaire pour coder un indice
+int nb_bits_requis(int ind){
   static int puiss = 0;
   static int nb = 1;
-  while(nb < cle_max(dico)){
+  while(nb < ind){
     puiss++;
     nb *= 2;
   }
@@ -19,11 +19,12 @@ int nb_bits_requis(Dico dico){
 // Laissant les bits de poids faibles libre.
 void Ajout(int ind, uint32_t *tampon, int *nb_bits_restant, Dico dico){
 
-  int bits = nb_bits_requis(dico);
-  *tampon = *tampon >> (*nb_bits_restant - bits);
-  *tampon = *tampon | (uint32_t) ind;
+  int bits = nb_bits_requis(nombre_elements(dico));
   *nb_bits_restant -= bits;
-  *tampon = *tampon << (*nb_bits_restant);
+  *tampon = ((*tampon >> (*nb_bits_restant)) | (uint32_t) ind) << (*nb_bits_restant);
+  #ifdef DEBUG
+  printf("TAMPON : %0x + ajout : %0x\n", *tampon, (uint32_t)ind);
+  #endif
 }
 
 
@@ -34,26 +35,25 @@ void Ajout(int ind, uint32_t *tampon, int *nb_bits_restant, Dico dico){
 uint8_t Retrait(uint32_t *tampon, int *nb_bits_restant, Dico dico){
   uint8_t valeur;
   valeur = *tampon >> 24;
-  *tampon = *tampon & (0x00FFFFFF);
-  *tampon = *tampon << 8;
+  *tampon = (*tampon & (0x00FFFFFF)) << 8;
   *nb_bits_restant += 8;
   return valeur;
 }
 
+
+// Ajout version décompression : on ajoute dans le tampon les bits lu
 void Ajout_decompression(int ind, uint32_t *tampon, int *nb_bits_restant, Dico dico){
-  *tampon = *tampon >> (*nb_bits_restant - 8);
-  *tampon = *tampon | (uint32_t) ind;
   *nb_bits_restant -= 8;
-  *tampon = *tampon << (*nb_bits_restant);
+  *tampon = ((*tampon >> (*nb_bits_restant)) | (uint32_t) ind) << (*nb_bits_restant);
 }
 
 
+// Retrait version décompression : on effectue un retrait du nombre de bits requis par l'arbre
 int Retrait_decompression(uint32_t *tampon, int *nb_bits_restant, Dico dico){
   uint32_t valeur;
-  int bits = nb_bits_requis(dico);
+  int bits = nb_bits_requis(nombre_elements(dico));
   valeur = *tampon >> (32-bits);
-  // *tampon = *tampon && ~(valeur << (32 - bits));
   *tampon = *tampon << bits;
   *nb_bits_restant += bits;
-  return (int) valeur;
+  return (int)valeur;
 }

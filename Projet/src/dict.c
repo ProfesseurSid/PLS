@@ -5,8 +5,9 @@
 
 #define NBMAXSEQ 2048
 
+//
 void Initialiser(Dico *dico){
-	*dico = realloc (*dico, sizeof(Code)) ;
+	*dico = malloc (sizeof(Code)) ;
     (*dico)->cle = 0;
     (*dico)->longueur = 1;
     (*dico)->code = malloc(sizeof(int));
@@ -18,6 +19,7 @@ void Initialiser(Dico *dico){
 		*dico = ajouter_Code(*dico, i, &i, 1);
 	}
 }
+
 
 /* cherche la chaine prefixe+mono dans le tableau. */
 /* renvoie -1 si la chaine prefixe+mono est présente, -42 si le préfixe est absent aussi, l'indice du préfixe sinon */
@@ -80,7 +82,20 @@ int Inserer(Dico *dictio, Code prefixe, Code mono){
 		return -1;
 	}
 	else {
+		#ifdef DEBUG
+		printf("PreFusion : ");
+		for(int i=0; i<prefixe.longueur; i++)
+			printf("%c", prefixe.code[i]);
+		printf(" SufFusion : %c", mono.code[0]);
+		printf("\n");
+		#endif
 		Fusion(prefixe,mono,&fusion);
+		#ifdef DEBUG
+		printf("ajoutDico[%i] : ", cle_max(*dictio)+1);
+		for(int i=0; i<fusion.longueur; i++)
+			printf("%c", fusion.code[i]);
+		printf("\n");
+		#endif
 		*dictio = ajouter_Code(*dictio, cle_max(*dictio)+1, fusion.code, fusion.longueur);
 		if(nombre_cles_arbre(*dictio) >= NBMAXSEQ) {
 			Initialiser(dictio);
@@ -89,6 +104,7 @@ int Inserer(Dico *dictio, Code prefixe, Code mono){
 	return 1;
 }
 
+// Transforme un code en une chaine (en int*)
 int *CodeVersChaine(Code code){
 	int *retour;
 	retour = malloc(code.longueur*sizeof(int));
@@ -97,6 +113,7 @@ int *CodeVersChaine(Code code){
 	return retour;
 }
 
+// Copy d'une séquence dans le tableau d'un code
 void CopyVersCode(Code new_code, int *seq){
 	int i;
 	for(i = 0; i < new_code.longueur; i++){
@@ -104,6 +121,7 @@ void CopyVersCode(Code new_code, int *seq){
 	}
 }
 
+// Fonction de transformation d'une séquence en code
 Code SequenceVersCode(int *sequence, int longueur){
 	Code new_code;
 	new_code.code = malloc(longueur*sizeof(int));
@@ -115,20 +133,28 @@ Code SequenceVersCode(int *sequence, int longueur){
 }
 
 
+//Cherche si l'indice donné en paramètre est compris dans le dictionnaire
 int Appartient(Dico dictio, int ind){
 	return rechercher_cle_arbre(dictio,ind)!=NULL;
 }
 
+// Calcul de la longueur d'un dico
 int longueur(Dico dictio, int ind){
-	if(rechercher_cle_arbre(dictio,ind) != NULL)
+	if(Appartient(dictio, ind))
 		return rechercher_cle_arbre(dictio,ind)->longueur;
 	else
 		return 0;
 }
 
+// Cherche une valeur dans un dictionnaire
 int element(Dico dictio, int ind, int elem){
-	if(rechercher_cle_arbre(dictio,ind) != NULL)
+	if(Appartient(dictio, ind))
 		return rechercher_cle_arbre(dictio,ind)->code[elem];
 	else
 		return -1;
+}
+
+// 
+int nombre_elements(Dico dictio){
+	return cle_max(dictio);
 }
