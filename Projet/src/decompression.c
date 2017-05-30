@@ -32,7 +32,8 @@ void decodage (char* fichier,char* sortie) {
   uint32_t tampon = 0;
   // int lecture;
   int nb_bits_restant = 32;
-  int i,j;
+  int i;
+  char j;
   Code ac;
   Code wc;
   Dico D;
@@ -49,24 +50,26 @@ void decodage (char* fichier,char* sortie) {
     s = fopen(sortie,"w");
     a = malloc(longueur(D,i)*sizeof(int));
 
-    for(j=0; j<longueur(D,i); j++)
-      a[j] = element(D,i,j);
+    for(int k=0; k<longueur(D,i); k++)
+      a[k] = element(D,i,k);
 
     w = malloc(longueur(D,i)*sizeof(int));
 
-    for(j=0; j<longueur(D,i); j++){
-      w[j] = a[j];
+    for(int k=0; k<longueur(D,i); k++){
+      w[k] = a[k];
     }
 
     ecriture(s,w,longueur(D,i));
 
     while (!feof(e)) {
-      fscanf(e,"%d",&j);
+      printf("OUI\n");
+      fscanf(e,"%c",&j);
       Ajout(j, &tampon, &nb_bits_restant, D);
       if(nb_bits_requis(D) - (32 - nb_bits_restant) > 0){
-        fscanf(e,"%d",&j);
+        fscanf(e,"%c",&j);
         Ajout(j, &tampon,&nb_bits_restant, D);
         j = Retrait_decompression(&tampon, &nb_bits_restant,D);
+        printf("J : %i\n", j);
       }
       if (Appartient(D,j)>0) {
         x = realloc(x, longueur(D,j)*sizeof(int));
