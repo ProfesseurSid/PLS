@@ -45,7 +45,8 @@ void decodage (char* fichier,char* sortie) {
 
   if (e != NULL) {
 
-    fscanf(e,"%d",&i);
+    i = fgetc(e);
+    printf("FFF%i\n", i);
 
     s = fopen(sortie,"w");
     a = malloc(longueur(D,i)*sizeof(int));
@@ -63,13 +64,18 @@ void decodage (char* fichier,char* sortie) {
 
     while (!feof(e)) {
       printf("OUI\n");
-      fscanf(e,"%c",&j);
+      j = fgetc(e);
       Ajout(j, &tampon, &nb_bits_restant, D);
-      if(nb_bits_requis(D) - (32 - nb_bits_restant) > 0){
-        fscanf(e,"%c",&j);
+      printf("NBBITSRESTANT %i\n", nb_bits_restant);
+      if(nb_bits_requis(D) > (32 - nb_bits_restant)){
+        j = fgetc(e);
         Ajout(j, &tampon,&nb_bits_restant, D);
         j = Retrait_decompression(&tampon, &nb_bits_restant,D);
         printf("J : %i\n", j);
+      }
+      else{
+        j = Retrait_decompression(&tampon, &nb_bits_restant, D);
+        printf("J : %i\n", j);        
       }
       if (Appartient(D,j)>0) {
         x = realloc(x, longueur(D,j)*sizeof(int));

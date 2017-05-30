@@ -44,9 +44,11 @@ uint8_t Retrait(uint32_t *tampon, int *nb_bits_restant, Dico dico){
 
 
 int Retrait_decompression(uint32_t *tampon, int *nb_bits_restant, Dico dico){
-  uint8_t valeur;
-  valeur = *tampon >> (32-nb_bits_requis(dico));
-  *tampon = *tampon << nb_bits_requis(dico);
-  nb_bits_restant += nb_bits_requis(dico);
-  return valeur;
+  uint32_t valeur;
+  int bits = nb_bits_requis(dico);
+  valeur = *tampon >> (32-bits);
+  *tampon = *tampon << bits;
+  *nb_bits_restant += bits;
+  // printf("%i VALEUR RETOUR\n", (int) valeur);
+  return (int)valeur;
 }
