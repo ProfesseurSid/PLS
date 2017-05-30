@@ -62,13 +62,12 @@ void decodage (char* fichier,char* sortie) {
 
     while (!feof(e)) {
       fscanf(e,"%d",&j);
-      if(nb_bits_requis(D)>8){
-        Ajout(j, &tampon,&nb_bits_restant, D);
+      Ajout(j, &tampon, &nb_bits_restant, D);
+      if(nb_bits_requis(D) - (32 - nb_bits_restant) > 0){
         fscanf(e,"%d",&j);
         Ajout(j, &tampon,&nb_bits_restant, D);
         j = Retrait_decompression(&tampon, &nb_bits_restant,D);
       }
-      while(nb_bits_restant < (32 - nb_bits_requis(D))){
       if (Appartient(D,j)>0) {
         x = realloc(x, longueur(D,j)*sizeof(int));
 
@@ -103,7 +102,6 @@ void decodage (char* fichier,char* sortie) {
           w[k] = element(D,i,k);
       }
     }
-  }
     fclose(e);
     fclose(s);
   }else{
