@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include "binaryIO.h"
 
-// Calcul le nombre de bit nécessaire pour coder une sequence
-int nb_bits_requis(Dico dico){
+// Calcul le nombre de bit nécessaire pour coder un indice
+int nb_bits_requis(int ind){
   static int puiss = 0;
   static int nb = 1;
-  while(nb < cle_max(dico)){
+  while(nb < ind){
     puiss++;
     nb *= 2;
   }
@@ -19,9 +19,12 @@ int nb_bits_requis(Dico dico){
 // Laissant les bits de poids faibles libre.
 void Ajout(int ind, uint32_t *tampon, int *nb_bits_restant, Dico dico){
 
-  int bits = nb_bits_requis(dico);
+  int bits = nb_bits_requis(cle_max(dico));
+  printf("\nbitsreq : %i ; bitsrest : %i\n", bits, *nb_bits_restant);
   *tampon = *tampon >> (*nb_bits_restant - bits);
+  printf("TAMPON : %0x + ajout : %0x\n", *tampon, (uint32_t)ind);
   *tampon = *tampon | (uint32_t) ind;
+  printf("RETAMPON : %0x\n\n", *tampon);
   *nb_bits_restant -= bits;
   *tampon = *tampon << (*nb_bits_restant);
 }
@@ -36,19 +39,25 @@ uint8_t Retrait(uint32_t *tampon, int *nb_bits_restant, Dico dico){
   valeur = *tampon >> 24;
   *tampon = *tampon & (0x00FFFFFF);
   *tampon = *tampon << 8;
-
   *nb_bits_restant += 8;
   return valeur;
 }
 
+void Ajout_decompression(int ind, uint32_t *tampon, int *nb_bits_restant, Dico dico){
+  *tampon = *tampon >> (*nb_bits_restant - 8);
+  *tampon = *tampon | (uint32_t) ind;
+  *nb_bits_restant -= 8;
+  *tampon = *tampon << (*nb_bits_restant);
+}
 
 
 int Retrait_decompression(uint32_t *tampon, int *nb_bits_restant, Dico dico){
   uint32_t valeur;
-  int bits = nb_bits_requis(dico);
+  int bits = nb_bits_requis(cle_max(dico));
   valeur = *tampon >> (32-bits);
+  // *tampon = *tampon && ~(valeur << (32 - bits));
   *tampon = *tampon << bits;
   *nb_bits_restant += bits;
-  // printf("%i VALEUR RETOUR\n", (int) valeur);
+  printf("%i VALEUR RETOUR\n", (int) valeur);
   return (int)valeur;
 }

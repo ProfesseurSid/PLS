@@ -18,12 +18,13 @@ int* concat(int* a, int longa, int* b, int longb) {
     c[i+longa] = b[i];
   }
 
-  printf("\n\n");
+  printf("\n");
   return c;
 }
 
 void ecriture(FILE* s,int* c,int longc) {
   for (int i = 0; i<longc; i++) {
+    // printf("%c", c[i]);
     fputc(c[i],s);
   }
 }
@@ -33,7 +34,7 @@ void decodage (char* fichier,char* sortie) {
   // int lecture;
   int nb_bits_restant = 32;
   int i;
-  char j;
+  int j;
   Code ac;
   Code wc;
   Dico D;
@@ -46,44 +47,44 @@ void decodage (char* fichier,char* sortie) {
   if (e != NULL) {
 
     i = fgetc(e);
-    printf("FFF%i\n", i);
 
     s = fopen(sortie,"w");
-    a = malloc(longueur(D,i)*sizeof(int));
-
-    for(int k=0; k<longueur(D,i); k++)
+    a = malloc(longueur(D,(int) i)*sizeof(int));
+    for(int k=0; k<longueur(D,(int)i); k++)
       a[k] = element(D,i,k);
 
-    w = malloc(longueur(D,i)*sizeof(int));
+    w = malloc(longueur(D,(int)i)*sizeof(int));
 
-    for(int k=0; k<longueur(D,i); k++){
+    for(int k=0; k<longueur(D,(int)i); k++){
       w[k] = a[k];
     }
-
-    ecriture(s,w,longueur(D,i));
+    ecriture(s,w,longueur(D,(int)i));
 
     while (!feof(e)) {
-      printf("OUI\n");
-      j = fgetc(e);
-      Ajout(j, &tampon, &nb_bits_restant, D);
-      printf("NBBITSRESTANT %i\n", nb_bits_restant);
-      if(nb_bits_requis(D) > (32 - nb_bits_restant)){
+      if(nb_bits_requis(cle_max(D)+1) > (32 - nb_bits_restant)){
         j = fgetc(e);
-        Ajout(j, &tampon,&nb_bits_restant, D);
+      // printf("GET1 : %0x\n", j);
+        Ajout_decompression(j, &tampon, &nb_bits_restant, D);
+      // printf("NBBITSRESTANT %i\n", nb_bits_restant);
+      }
+      if(nb_bits_requis(cle_max(D)+1) > (32 - nb_bits_restant)){
+        j = fgetc(e);
+        // printf("GET2 : %0x\n", j);
+        Ajout_decompression(j, &tampon,&nb_bits_restant, D);
         j = Retrait_decompression(&tampon, &nb_bits_restant,D);
-        printf("J : %i\n", j);
+        // printf("J : %i ; bitsreq : %i\n", j, nb_bits_requis(cle_max(D)+1));        
       }
       else{
         j = Retrait_decompression(&tampon, &nb_bits_restant, D);
-        printf("J : %i\n", j);        
+        // printf("J : %i ; bitsreq : %i\n", j, nb_bits_requis(cle_max(D)+1));
       }
       if (Appartient(D,j)>0) {
         x = realloc(x, longueur(D,j)*sizeof(int));
 
         for(int k=0; k<longueur(D,j); k++)
-          x[k] = element(D,j,k);
+          x[k] = element(D,(int) j,k);
 
-        ecriture(s,x,longueur(D,j));
+        ecriture(s,x,longueur(D,(int) j));
         a[0] = x[0];
         ac = SequenceVersCode(a,1);
         wc = SequenceVersCode(w,longueur(D,i));
@@ -91,8 +92,13 @@ void decodage (char* fichier,char* sortie) {
         i = j;
         w = realloc(w, longueur(D,i)*sizeof(int));
 
-        for(int k=0; k<longueur(D,i); k++)
+        printf("I : %i ; J : %i\n", i, j);
+        printf("wk%i : ", i);
+        for(int k=0; k<longueur(D,i); k++){
           w[k] = element(D,i,k);
+          printf("%c", w[k]);
+        }
+        printf("\n");
       } else {
         x = realloc(x, (longueur(D,i)+1)*sizeof(int));
 
@@ -107,9 +113,29 @@ void decodage (char* fichier,char* sortie) {
         Inserer(&D,wc,ac);
         i = j;
 
-        for(int k=0; k<longueur(D,i); k++)
+        printf("I : %i ; J : %i\n", i, j);
+        printf("wk%i : ", i);
+        for(int k=0; k<longueur(D,i); k++){
           w[k] = element(D,i,k);
+          printf("%c", w[k]);
+        }
+        printf("\n");
       }
+      // printf("nbseq : %i ; nbreq : %i\n", cle_max(D), nb_bits_requis(cle_max(D)+1));
+      // j = fgetc(e);
+      // Ajout_decompression(j, &tampon, &nb_bits_restant, D);
+      // printf("NBBITSRESTANT %i\n", nb_bits_requis(cle_max(D)+1));
+      // if(nb_bits_requis(cle_max(D)+1) > (32 - nb_bits_restant)){
+      //   printf("ICI\n");
+      //   j = fgetc(e);
+      //   Ajout_decompression(j, &tampon,&nb_bits_restant, D);
+      //   j = Retrait_decompression(&tampon, &nb_bits_restant,D);
+      //   printf("J : %i\n", j);        
+      // }
+      // else{
+      //   j = Retrait_decompression(&tampon, &nb_bits_restant, D);
+      //   printf("J : %i\n", j);      
+      // }
     }
     fclose(e);
     fclose(s);

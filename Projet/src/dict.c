@@ -80,7 +80,16 @@ int Inserer(Dico *dictio, Code prefixe, Code mono){
 		return -1;
 	}
 	else {
+		printf("PreFusion : ");
+		for(int i=0; i<prefixe.longueur; i++)
+			printf("%c", prefixe.code[i]);
+		printf(" SufFusion : %c", mono.code[0]);
+		printf("\n");
 		Fusion(prefixe,mono,&fusion);
+		printf("ajoutDico[%i] : ", cle_max(*dictio)+1);
+		for(int i=0; i<fusion.longueur; i++)
+			printf("%c", fusion.code[i]);
+		printf("\n");
 		*dictio = ajouter_Code(*dictio, cle_max(*dictio)+1, fusion.code, fusion.longueur);
 		if(nombre_cles_arbre(*dictio) >= NBMAXSEQ) {
 			Initialiser(dictio);

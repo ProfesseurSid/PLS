@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
 						printf("Give one or more file(s) to compress\n");
 
 					//ajout d'extension
+
 					for(int i=2; i<argc; i++) {
 						// printf("compression fichier %i.\r", i);
 						char *sortie;
@@ -42,11 +43,11 @@ int main(int argc, char *argv[]) {
 						// printf("compression fichier %i ... done\n", i);
 						free(sortie);
 					}
-					break; 
-					
-				//DECOMPRESSION 
-				case('d'): 
-					if(argc < 3) 
+					break;
+
+				//DECOMPRESSION
+				case('d'):
+					if(argc < 3)
 						printf("Give one or more file(s) to decompress\n"); 
 
 					for(int i=2; i<argc; i++) {

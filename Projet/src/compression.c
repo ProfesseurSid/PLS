@@ -74,16 +74,17 @@ while ( !feof(fp) ){
 	prefix = SequenceVersCode(w,wlength);
 	mono = SequenceVersCode(&a,1);
 	sortie = Chercher(dico , prefix , mono );
-
+	printf("prefix : ");
+	for(int z=0; z<wlength; z++)
+		printf("%c", prefix.code[z]);
+	printf(" mono : %c\n present : %i\n", mono.code[0], sortie);
 	//Si préfixe+mono est présent dans le dictionnaire
 	if ( sortie == -1 ) {
 
 		//On ralonge le préfixe.
 		int* temp = malloc((wlength+1)*sizeof(int));
-
 		for(int l=0; l<wlength; l++)
 			temp[l] = w[l];
-
 		temp[wlength] = a;
 		wlength++;
 		w = temp;
@@ -95,11 +96,13 @@ while ( !feof(fp) ){
 			Ajout(sortie, &tampon, &nb_bits_restant, dico);
 			sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
 			// nb_bits_restant += 8;
+				printf("%0x - %i\n", sortie_hexa, nb_bits_requis(cle_max(dico)));
 			fprintf(result,"%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			// printf("%i -- %i\n", nb_bits_requis(dico), cle_max(dico));
-			if(nb_bits_restant < nb_bits_requis(dico)){
+			if(nb_bits_restant < nb_bits_requis(cle_max(dico))){
 				sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
 				// nb_bits_restant += 11;
+				printf("%0x - %i\n", sortie_hexa, nb_bits_requis(cle_max(dico)));
 				fprintf(result,"%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			}
 
@@ -124,6 +127,7 @@ while ( !feof(fp) ){
 //Affichage de l'indice dans le fichier de sortie  uint8_t Retrait(uint32_t *tampon, int taille_act){   void Ajout(int ind, uint32_t *tampon, int taille){
 if(nb_bits_restant != 32){
 	sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
+				printf("%0x - %i\n", sortie_hexa, nb_bits_requis(cle_max(dico)));
 	fprintf(result,"%c", sortie_hexa); //%c pour les chars (d'après Servan)
 }
 
