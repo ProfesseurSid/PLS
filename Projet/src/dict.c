@@ -1,7 +1,7 @@
 #include "dict.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "avl.h"
+#include "abr.h"
 
 #define NBMAXSEQ 2048
 
@@ -13,10 +13,9 @@ void Initialiser(Dico *dico){
     (*dico)->code[0] = 0;
     (*dico)->fgauche = NULL ;
     (*dico)->fdroite = NULL ;
-    (*dico)->bal = 0 ;
-	for(int i=1; i<=255; i++){
+    // (*dico)->bal = 0 ;
+	for(int i=1; i<=255; i++)
 		*dico = ajouter_Code(*dico, i, &i, 1);
-	}
 }
 
 /* cherche la chaine prefixe+mono dans le tableau. */
