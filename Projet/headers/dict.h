@@ -14,5 +14,6 @@ Code SequenceVersCode(int *sequence, int longueur);
 int Appartient(Dico dictio, int ind);
 int longueur(Dico dictio, int ind);
 int element(Dico dictio, int ind, int elem);
+int nombre_elements(Dico dictio);
 
 #endif

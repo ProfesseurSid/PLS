@@ -6,7 +6,7 @@
 #define NBMAXSEQ 2048
 
 void Initialiser(Dico *dico){
-	*dico = realloc (*dico, sizeof(Code)) ;
+	*dico = malloc (sizeof(Code)) ;
     (*dico)->cle = 0;
     (*dico)->longueur = 1;
     (*dico)->code = malloc(sizeof(int));
@@ -80,16 +80,16 @@ int Inserer(Dico *dictio, Code prefixe, Code mono){
 		return -1;
 	}
 	else {
-		printf("PreFusion : ");
-		for(int i=0; i<prefixe.longueur; i++)
-			printf("%c", prefixe.code[i]);
-		printf(" SufFusion : %c", mono.code[0]);
-		printf("\n");
+		// printf("PreFusion : ");
+		// for(int i=0; i<prefixe.longueur; i++)
+		// 	printf("%c", prefixe.code[i]);
+		// printf(" SufFusion : %c", mono.code[0]);
+		// printf("\n");
 		Fusion(prefixe,mono,&fusion);
-		printf("ajoutDico[%i] : ", cle_max(*dictio)+1);
-		for(int i=0; i<fusion.longueur; i++)
-			printf("%c", fusion.code[i]);
-		printf("\n");
+		// printf("ajoutDico[%i] : ", cle_max(*dictio)+1);
+		// for(int i=0; i<fusion.longueur; i++)
+		// 	printf("%c", fusion.code[i]);
+		// printf("\n");
 		*dictio = ajouter_Code(*dictio, cle_max(*dictio)+1, fusion.code, fusion.longueur);
 		if(nombre_cles_arbre(*dictio) >= NBMAXSEQ) {
 			Initialiser(dictio);
@@ -129,15 +129,19 @@ int Appartient(Dico dictio, int ind){
 }
 
 int longueur(Dico dictio, int ind){
-	if(rechercher_cle_arbre(dictio,ind) != NULL)
+	if(Appartient(dictio, ind))
 		return rechercher_cle_arbre(dictio,ind)->longueur;
 	else
 		return 0;
 }
 
 int element(Dico dictio, int ind, int elem){
-	if(rechercher_cle_arbre(dictio,ind) != NULL)
+	if(Appartient(dictio, ind))
 		return rechercher_cle_arbre(dictio,ind)->code[elem];
 	else
 		return -1;
+}
+
+int nombre_elements(Dico dictio){
+	return cle_max(dictio);
 }

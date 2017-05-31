@@ -6,7 +6,6 @@
 
 float Compression_Rate(char * f,char* fsor){
 	float initial_size = 0;
-
 	FILE * fp;
 	fp = fopen(f,"r");
 	fseek(fp,0L,SEEK_END);
@@ -23,6 +22,9 @@ float Compression_Rate(char * f,char* fsor){
 }
 
 void compression(char* f,char* result_compress) {
+
+printf("compression de %s\n", f);
+
 
 uint8_t sortie_hexa;
 uint32_t tampon = 0;
@@ -74,10 +76,10 @@ while ( !feof(fp) ){
 	prefix = SequenceVersCode(w,wlength);
 	mono = SequenceVersCode(&a,1);
 	sortie = Chercher(dico , prefix , mono );
-	printf("prefix : ");
-	for(int z=0; z<wlength; z++)
-		printf("%c", prefix.code[z]);
-	printf(" mono : %c\n present : %i\n", mono.code[0], sortie);
+	// printf("prefix : ");
+	// for(int z=0; z<wlength; z++)
+	// 	printf("%c", prefix.code[z]);
+	// printf(" mono : %c\n present : %i\n", mono.code[0], sortie);
 	//Si préfixe+mono est présent dans le dictionnaire
 	if ( sortie == -1 ) {
 
@@ -96,13 +98,12 @@ while ( !feof(fp) ){
 			Ajout(sortie, &tampon, &nb_bits_restant, dico);
 			sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
 			// nb_bits_restant += 8;
-				printf("%0x - %i\n", sortie_hexa, nb_bits_requis(cle_max(dico)));
+			// printf("%0x - %i\n", sortie_hexa, nb_bits_requis(nombre_elements(dico)));
 			fprintf(result,"%c",sortie_hexa); //%c pour les chars (d'après Servan)
-			// printf("%i -- %i\n", nb_bits_requis(dico), cle_max(dico));
-			if(nb_bits_restant < nb_bits_requis(cle_max(dico))){
+			// printf("%i -- %i\n", nb_bits_requis(dico), nombre_elements(dico));
+			if(nb_bits_restant < nb_bits_requis(nombre_elements(dico))){
 				sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
-				// nb_bits_restant += 11;
-				printf("%0x - %i\n", sortie_hexa, nb_bits_requis(cle_max(dico)));
+				// printf("%0x - %i\n", sortie_hexa, nb_bits_requis(nombre_elements(dico)));
 				fprintf(result,"%c",sortie_hexa); //%c pour les chars (d'après Servan)
 			}
 
@@ -119,7 +120,7 @@ while ( !feof(fp) ){
 		}
 		//On replace w sur le dernier caractère lu
 		wlength = 1;
-		w = realloc (w, wlength * sizeof (int) ) ;
+		w = malloc (wlength * sizeof (int) ) ;
 		w[0] = a;
 	}
 }
@@ -127,7 +128,7 @@ while ( !feof(fp) ){
 //Affichage de l'indice dans le fichier de sortie  uint8_t Retrait(uint32_t *tampon, int taille_act){   void Ajout(int ind, uint32_t *tampon, int taille){
 if(nb_bits_restant != 32){
 	sortie_hexa = Retrait(&tampon, &nb_bits_restant, dico);
-				printf("%0x - %i\n", sortie_hexa, nb_bits_requis(cle_max(dico)));
+	// printf("OUIIIIII JE SUIS LA%0x - %i\n", sortie_hexa, nb_bits_requis(nombre_elements(dico)));
 	fprintf(result,"%c", sortie_hexa); //%c pour les chars (d'après Servan)
 }
 

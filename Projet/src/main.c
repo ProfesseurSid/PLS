@@ -25,7 +25,6 @@ int main(int argc, char *argv[]) {
 						printf("Give one or more file(s) to compress\n");
 
 					//ajout d'extension
-
 					for(int i=2; i<argc; i++) {
 						// printf("compression fichier %i.\r", i);
 						char *sortie;
@@ -42,6 +41,7 @@ int main(int argc, char *argv[]) {
 						compression(argv[i],sortie);
 						// printf("compression fichier %i ... done\n", i);
 						free(sortie);
+						// printf("\r");
 					}
 					break;
 
@@ -67,6 +67,8 @@ int main(int argc, char *argv[]) {
 					break;
 			}
 		}
+		else
+			printf("Wrong option. Use -h for help.\n");
 	}
 	else
 		printf("Syntax error. Use -h for help.\n");

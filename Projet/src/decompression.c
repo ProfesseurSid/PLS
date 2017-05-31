@@ -9,16 +9,16 @@ int* concat(int* a, int longa, int* b, int longb) {
   int* c = malloc((longa+longb)*sizeof(int));
 
   for (int i = 0; i < longa; i++) {
-    printf("%d - ", a[i]);
+    // printf("%d - ", a[i]);
     c[i] = a[i];
   }
 
   for (int i = 0; i < longb; i++) {
-      printf("%d - ", b[i]);
+      // printf("%d - ", b[i]);
     c[i+longa] = b[i];
   }
 
-  printf("\n");
+  // printf("\n");
   return c;
 }
 
@@ -31,7 +31,6 @@ void ecriture(FILE* s,int* c,int longc) {
 
 void decodage (char* fichier,char* sortie) {
   uint32_t tampon = 0;
-  // int lecture;
   int nb_bits_restant = 32;
   int i;
   int j;
@@ -55,31 +54,31 @@ void decodage (char* fichier,char* sortie) {
 
     w = malloc(longueur(D,(int)i)*sizeof(int));
 
-    for(int k=0; k<longueur(D,(int)i); k++){
+    for(int k=0; k<longueur(D,(int)i); k++)
       w[k] = a[k];
-    }
+    
     ecriture(s,w,longueur(D,(int)i));
 
     while (!feof(e)) {
-      if(nb_bits_requis(cle_max(D)+1) > (32 - nb_bits_restant)){
+      if(nb_bits_requis(nombre_elements(D)+1) > (32 - nb_bits_restant)){
         j = fgetc(e);
       // printf("GET1 : %0x\n", j);
         Ajout_decompression(j, &tampon, &nb_bits_restant, D);
       // printf("NBBITSRESTANT %i\n", nb_bits_restant);
       }
-      if(nb_bits_requis(cle_max(D)+1) > (32 - nb_bits_restant)){
+      if(nb_bits_requis(nombre_elements(D)+1) > (32 - nb_bits_restant)){
         j = fgetc(e);
         // printf("GET2 : %0x\n", j);
         Ajout_decompression(j, &tampon,&nb_bits_restant, D);
         j = Retrait_decompression(&tampon, &nb_bits_restant,D);
-        // printf("J : %i ; bitsreq : %i\n", j, nb_bits_requis(cle_max(D)+1));        
+        // printf("J : %i ; bitsreq : %i\n", j, nb_bits_requis(nombre_elements(D)+1));        
       }
       else{
         j = Retrait_decompression(&tampon, &nb_bits_restant, D);
-        // printf("J : %i ; bitsreq : %i\n", j, nb_bits_requis(cle_max(D)+1));
+        // printf("J : %i ; bitsreq : %i\n", j, nb_bits_requis(nombre_elements(D)+1));
       }
       if (Appartient(D,j)>0) {
-        x = realloc(x, longueur(D,j)*sizeof(int));
+        x = malloc(longueur(D,j)*sizeof(int));
 
         for(int k=0; k<longueur(D,j); k++)
           x[k] = element(D,(int) j,k);
@@ -90,17 +89,17 @@ void decodage (char* fichier,char* sortie) {
         wc = SequenceVersCode(w,longueur(D,i));
         Inserer(&D,wc,ac);
         i = j;
-        w = realloc(w, longueur(D,i)*sizeof(int));
+        w = malloc(longueur(D,i)*sizeof(int));
 
-        printf("I : %i ; J : %i\n", i, j);
-        printf("wk%i : ", i);
+        // printf("I : %i ; J : %i\n", i, j);
+        // printf("wk%i : ", i);
         for(int k=0; k<longueur(D,i); k++){
           w[k] = element(D,i,k);
-          printf("%c", w[k]);
+          // printf("%c", w[k]);
         }
-        printf("\n");
+        // printf("\n");
       } else {
-        x = realloc(x, (longueur(D,i)+1)*sizeof(int));
+        x = malloc((longueur(D,i)+1)*sizeof(int));
 
         for(int k=0; k<longueur(D,i); k++)
           x[k] = element(D,i,k);
@@ -113,19 +112,19 @@ void decodage (char* fichier,char* sortie) {
         Inserer(&D,wc,ac);
         i = j;
 
-        printf("I : %i ; J : %i\n", i, j);
-        printf("wk%i : ", i);
+        // printf("I : %i ; J : %i\n", i, j);
+        // printf("wk%i : ", i);
         for(int k=0; k<longueur(D,i); k++){
           w[k] = element(D,i,k);
-          printf("%c", w[k]);
+          // printf("%c", w[k]);
         }
-        printf("\n");
+        // printf("\n");
       }
-      // printf("nbseq : %i ; nbreq : %i\n", cle_max(D), nb_bits_requis(cle_max(D)+1));
+      // printf("nbseq : %i ; nbreq : %i\n", nombre_elements(D), nb_bits_requis(nombre_elements(D)+1));
       // j = fgetc(e);
       // Ajout_decompression(j, &tampon, &nb_bits_restant, D);
-      // printf("NBBITSRESTANT %i\n", nb_bits_requis(cle_max(D)+1));
-      // if(nb_bits_requis(cle_max(D)+1) > (32 - nb_bits_restant)){
+      // printf("NBBITSRESTANT %i\n", nb_bits_requis(nombre_elements(D)+1));
+      // if(nb_bits_requis(nombre_elements(D)+1) > (32 - nb_bits_restant)){
       //   printf("ICI\n");
       //   j = fgetc(e);
       //   Ajout_decompression(j, &tampon,&nb_bits_restant, D);
