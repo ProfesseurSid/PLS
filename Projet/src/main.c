@@ -6,6 +6,8 @@
 #include "decompression.h"
 
 int main(int argc, char *argv[]) {
+	char *sortie = NULL;
+	int length;
 	// lecture des arguments
 	if(argc > 1) {
 		if(argv[1][0]=='-') {
@@ -14,56 +16,53 @@ int main(int argc, char *argv[]) {
 				//Aide
 				case('h'):
 					printf("NAME\n\tLZW compressor - file compressor using lzw algorithm\n");
-					printf("\nSYNOPSIS\n\tlzw [-cd] [val [...]]\n");
-					printf("\nLISTING OPTIONS\n\t-c\tCompresses the given file(s).\n\t\tCompressed file is <file name>.lzw.\n\t-d\tDecompresses the given file(s).\n\t\tFiles MUST be files compressed with .lzw extension.\n\t\tOtherwise, does not even try.\n\t-h\tDisplays this help.\n");
+					printf("\nSYNOPSIS\n\tlzw [-cd] [val [-s [val]]]\n");
+					printf("\nLISTING OPTIONS\n\t-c\tCompresses the given file(s).\n\t\tCompressed file is <file name>.lzw.\n\t-d\tDecompresses the given file.\n\t\tFiles MUST be files compressed with .lzw extension.\n\t\tOtherwise, does not even try.\n\t-s\tUsed with -d.\n\t\tRedirects the output to the file whose name is given.\n\t-h\tDisplays this help.\n");
 					break;
 
 				//Commande compression
 				case('c'):
 
-					if(argc < 3)
-						printf("Give one or more file(s) to compress\n");
+					if(argc < 3){
+						printf("Give a file to compress\n");
+						exit(1);
+					}
 
 					//ajout d'extension
-					for(int i=2; i<argc; i++) {
-						// printf("compression fichier %i.\r", i);
-						char *sortie;
-						int length = strlen(argv[i]);
-						sortie = malloc((length+5)*sizeof(char));
-						// printf("compression fichier %i ..\r", i);
-						strcpy(sortie, argv[i]);
-						sortie[length]   = '.';
-						sortie[length+1] = 'l';
-						sortie[length+2] = 'z';
-						sortie[length+3] = 'w';
-						sortie[length+4] =  0 ;
-						// printf("compression fichier %i ...\r", i);
-						compression(argv[i],sortie);
-						// printf("compression fichier %i ... done\n", i);
-						free(sortie);
-						// printf("\r");
-					}
+					length = strlen(argv[2]);
+					sortie = malloc((length+5)*sizeof(char));
+					strcpy(sortie, argv[2]);
+					sortie[length]   = '.';
+					sortie[length+1] = 'l';
+					sortie[length+2] = 'z';
+					sortie[length+3] = 'w';
+					sortie[length+4] =  0 ;
+					compression(argv[2],sortie);
+					free(sortie);
 					break;
 
 				//DECOMPRESSION
 				case('d'):
 					if(argc < 3)
-						printf("Give one or more file(s) to decompress\n"); 
-
-					for(int i=2; i<argc; i++) {
-						char *sortie;
-						int length = strlen(argv[i]);
-						sortie = malloc((length)*sizeof(char));
-						strcpy(sortie, argv[i]);
-
-						//Verification du format d'extension
-						if(sortie[length-4] == '.' && sortie[length-3] == 'l' && sortie[length-2] == 'z' && sortie[length-1] == 'w') {
-							sortie[length-4] = 0;
-							decodage(argv[i],sortie);
+						printf("Give a file to decompress\n");
+					//Verification du format d'extension
+					length = strlen(argv[2]);
+					sortie = malloc((length)*sizeof(char));
+					strcpy(sortie, argv[2]);
+					sortie[length-4] = 0;
+					if(argv[2][length-4] == '.' && argv[2][length-3] == 'l' && argv[2][length-2] == 'z' && argv[2][length-1] == 'w') {
+						if(argc > 4){
+							if(argv[3][0] == '-' && argv[3][1] == 's'){
+								length = strlen(argv[4]);
+								sortie = realloc(sortie, (length+1)*sizeof(char));
+								strcpy(sortie, argv[4]);
+							}
 						}
-						else
-							printf("Wrong extension (.lzw required)\n");
+						decodage(argv[2],sortie);
 					}
+					else
+						printf("Wrong extension (.lzw required)\n");
+
 					break;
 			}
 		}

@@ -37,6 +37,9 @@ void decodage (char* fichier,char* sortie) {
   Code ac;
   Code wc;
   Dico D;
+
+  printf("decompression du fichier %s...\n", fichier);
+
   Initialiser(&D);
   int* w, *x = NULL, *a;
   FILE *e = NULL;
@@ -136,6 +139,8 @@ void decodage (char* fichier,char* sortie) {
       //   printf("J : %i\n", j);      
       // }
     }
+    printf("fichier decompresse avec succes dans le fichier %s !\n", sortie);
+
     fclose(e);
     fclose(s);
   }else{

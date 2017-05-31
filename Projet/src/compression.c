@@ -4,26 +4,19 @@
 #include "dict.h"
 #include "binaryIO.h"
 
-float Compression_Rate(char * f,char* fsor){
+float Compression_Rate(FILE * f,FILE* fsor){
 	float initial_size = 0;
-	FILE * fp;
-	fp = fopen(f,"r");
-	fseek(fp,0L,SEEK_END);
-	initial_size = ftell(fp);
-	fclose(fp);
-
-	FILE *fs;
-	fs = fopen(fsor,"r");
-	fseek(fs,0L,SEEK_END);
-	initial_size = 100 * (1 - (ftell(fs)/initial_size));
-	fclose(fs);
+	fseek(f,0,SEEK_END);
+	initial_size = ftell(f);
+	fseek(fsor,0,SEEK_END);
+	initial_size = 100 * (1 - (ftell(fsor)/initial_size));
 
 	return initial_size;
 }
 
 void compression(char* f,char* result_compress) {
 
-printf("compression de %s\n", f);
+// printf(".\r");
 
 
 uint8_t sortie_hexa;
@@ -41,15 +34,16 @@ Dico dico;
 
 Code prefix, mono;
 
+printf("compression du fichier %s...\n", f);
 //Si un fichier porte le nom du fichier à produire on le supprime
 remove(result_compress);
-
 //Initialisation du dictionnaire
 Initialiser(&dico);
 
 //fp est le fichier d'entrée. Ouverture du fichier d'entrée
 FILE *fp;
 fp = fopen(f,"r");
+// printf("compression du fichier %s...\n", f);
 
 //Problème lors de l'ouverture du fichier
 if(fp == NULL) {
@@ -70,7 +64,6 @@ result = fopen(result_compress,"w");
 
 //Tant que la fin du fichier n'est pas atteinte :
 while ( !feof(fp) ){
-
 	//a est le caractère suivant
 	a = fgetc(fp);
 	prefix = SequenceVersCode(w,wlength);
@@ -131,6 +124,8 @@ if(nb_bits_restant != 32){
 	// printf("OUIIIIII JE SUIS LA%0x - %i\n", sortie_hexa, nb_bits_requis(nombre_elements(dico)));
 	fprintf(result,"%c", sortie_hexa); //%c pour les chars (d'après Servan)
 }
+
+printf("fichier %s compresse avec succes !\nTaux de compression : %f\n", f, Compression_Rate(fp, result));
 
 //Fin des opérations. Fermeture des fichiers.
 fclose(result);
