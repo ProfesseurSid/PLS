@@ -43,8 +43,10 @@ int main(int argc, char *argv[]) {
 
 				//DECOMPRESSION
 				case('d'):
-					if(argc < 3)
+					if(argc < 3){
 						printf("Give a file to decompress\n");
+						exit(1);
+					}
 					//Verification du format d'extension
 					length = strlen(argv[2]);
 					sortie = malloc((length)*sizeof(char));

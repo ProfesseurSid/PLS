@@ -30,8 +30,8 @@ Dico ajouter_noeud (Dico a, Dico n)
     a->fdroite = ajouter_noeud (a->fdroite, n) ;
   }
   return a ;
-  
-}  
+
+}
 
 Dico rechercher_cle_arbre (Dico a, int valeur)
 {
@@ -65,13 +65,13 @@ void afficher_arbre (Dico a, int niveau)
     on l'affiche en le penchant sur sa gauche
     la partie droite (haute) se retrouve en l'air
   */
-  
+
   int i ;
-  
+
   if (a != NULL)
     {
       afficher_arbre (a->fdroite,niveau+1) ;
-      
+
       for (i = 0; i < niveau; i++) printf ("\t") ;
       printf (" %d (%d)(/%d)\n\n", a->cle, niveau, a->bal) ;
 
@@ -85,7 +85,7 @@ int hauteur_arbre (Dico a)
   /*
     calculer la hauteur de l'arbre a
   */
-  
+
   if (a == NULL)
     return 0 ;
   else
@@ -99,10 +99,10 @@ void parcourir_arbre (Dico a, int *t, int niveau)
 {
   if (a == NULL)
     return ;
-  
+
   t [niveau] = t [niveau] + 1 ;
   parcourir_arbre (a->fgauche, t, niveau+1) ;
-  parcourir_arbre (a->fdroite, t, niveau+1) ;  
+  parcourir_arbre (a->fdroite, t, niveau+1) ;
 
   return ;
 }
@@ -112,22 +112,22 @@ void nombre_noeuds_par_niveau (Dico a)
   int i  ;
   int *t ;
   int h  ;
-  
+
   h = hauteur_arbre (a) ;
 
   /* Allocation d'un tableau d'entier, une case par niveau */
   t = malloc (h * sizeof (int)) ;
 
   /* initialisation du tableau */
-  
+
   for (i = 0; i < h ; i++)
     t[i] = 0 ;
 
-  /* 
+  /*
      Parcourir l'arbre a partir du niveau 0
      le tableau t est passe en parametre
   */
-  
+
   parcourir_arbre (a, t, 0) ;
 
   for (i = 0; i < h ; i++)
@@ -156,7 +156,7 @@ Dico cle_superieure_arbre (Dico a, int valeur, Dico *sup)
 {
   if (a == NULL)
     return *sup ;
-  
+
   if (valeur < a->cle)
     {
       *sup = a ;
@@ -177,22 +177,22 @@ Dico rechercher_cle_sup_arbre (Dico a, int valeur)
 {
   Dico ptrouve ;
   Dico psup = NULL ;
-    
+
   ptrouve = cle_superieure_arbre (a, valeur, &psup) ;
   return ptrouve ;
-  
+
 }
 
 Dico rotationDroite(Dico a){
   // Je deviens le fils droit de mon fils gauche
-  if (a != NULL){  
+  if (a != NULL){
     Dico NR = a->fgauche ;
     if(NR!=NULL){
       a->fgauche = NR->fdroite ;
       Dico Pred = rechercher_cle_sup_arbre(a, a->cle) ;
-      if(Pred != NULL && Pred->fdroite == a) 
+      if(Pred != NULL && Pred->fdroite == a)
         Pred->fdroite = NR ;
-      if(Pred != NULL && Pred->fgauche == a) 
+      if(Pred != NULL && Pred->fgauche == a)
         Pred->fgauche = NR ;
       NR->fdroite = a ;
       NR->fdroite->bal = hauteur_arbre(NR->fdroite->fdroite) - hauteur_arbre(NR->fdroite->fgauche) ;
@@ -212,9 +212,9 @@ Dico rotationGauche(Dico a){
     if(NR != NULL){
       a->fdroite = NR->fgauche ;
       Dico Pred = rechercher_cle_sup_arbre(a, a->cle) ;
-      if(Pred != NULL && Pred->fgauche == a) 
+      if(Pred != NULL && Pred->fgauche == a)
         Pred->fgauche = NR ;
-      if(Pred != NULL && Pred->fdroite == a) 
+      if(Pred != NULL && Pred->fdroite == a)
         Pred->fdroite = NR ;
       NR->fgauche = a ;
       NR->fgauche->bal = hauteur_arbre(NR->fgauche->fdroite) - hauteur_arbre(NR->fgauche->fgauche) ;
@@ -240,7 +240,7 @@ Dico doubleRotationDroite(Dico a){
 }
 
 Dico Equilibrage(Dico a){
-  // Selon l'algorithme donne dans le polycopie
+
   if (a->bal >= 2){
     if (a->fdroite->bal >= 0){
       return rotationGauche(a) ;
@@ -254,7 +254,7 @@ Dico Equilibrage(Dico a){
       return rotationDroite(a) ;
     }
     else{
-      return doubleRotationDroite(a) ; 
+      return doubleRotationDroite(a) ;
     }
   }
   else{
@@ -266,9 +266,9 @@ Dico ajouter_Code (Dico a, int cle, int *sequence, int longueur)
 {
   Dico n ;
   Dico ptrouve ;
-  
-  /* 
-     ajout de la clé. Creation du noeud n qu'on insere 
+
+  /*
+     ajout de la clé. Creation du noeud n qu'on insere
     dans l'arbre a
   */
 
@@ -317,14 +317,14 @@ Dico cle_inferieure_arbre (Dico a, int valeur, Dico *inf)
 {
   if (a == NULL)
     return *inf ;
-  
+
   if (valeur > a->cle)
     {
       *inf = a ;
       return cle_inferieure_arbre (a->fdroite, valeur, inf) ;
     }
   else
-    {     
+    {
       return cle_inferieure_arbre (a->fgauche, valeur, inf) ;
     }
 }
@@ -333,18 +333,18 @@ Dico rechercher_cle_inf_arbre (Dico a, int valeur)
 {
   Dico ptrouve ;
   Dico pinf = NULL ;
-    
+
   ptrouve = cle_inferieure_arbre (a, valeur, &pinf) ;
-  return ptrouve ;  
+  return ptrouve ;
 }
 
 int EquilibreComplet1 (Dico a)
 {
   int h ;
   int nbcles;
-  
+
   int p = 1 ;
-  
+
   h = hauteur_arbre (a) ;
   p = (p << h) - 1  ;
 
@@ -365,32 +365,15 @@ int EquilibreComplet2 (Dico a)
   if ((a->fgauche != NULL && a->fdroite == NULL) || (a->fgauche == NULL && a->fdroite != NULL))
     return 0 ;
 
-  return (EquilibreComplet2 (a->fgauche) && EquilibreComplet2 (a->fdroite)) ; 
+  return (EquilibreComplet2 (a->fgauche) && EquilibreComplet2 (a->fdroite)) ;
 }
 
-// Dico lire_arbre (char *nom_fichier)
-// {
-//   FILE *f ;
-//   int cle;
-//   Dico a = NULL;
-  
-//   f = fopen (nom_fichier, "r") ;
-
-//   while (fscanf (f, "%d", &cle) != EOF)
-//     {
-//       a = ajouter_cle (a, cle) ;
-//     }
-    
-//   fclose (f) ;
-
-//   return a ;
-// }
 
 Dico detruire_cle_arbre (Dico a, int cle)
 {
   Dico AC = NULL ;
   // Si la cle est absente ou l'arbre vide, renvoie l'arbre tel quel
-  if((a == NULL) || (rechercher_cle_arbre(a,cle) == NULL)) 
+  if((a == NULL) || (rechercher_cle_arbre(a,cle) == NULL))
     return a ;
   // Si on supprime la racine : le fils droit devient la racine
   // Puis on ajoute l'arborescence du fils droit a ce nouvel arbre
@@ -411,7 +394,7 @@ Dico detruire_cle_arbre (Dico a, int cle)
       AC->fdroite->bal = hauteur_arbre(AC->fdroite->fdroite) - hauteur_arbre(AC->fdroite->fgauche) ;
     if(AC->fdroite != NULL && (AC->fdroite->bal<-1 || AC->fdroite->bal>1))
       AC->fdroite = Equilibrage(AC->fdroite) ;
-    
+
     AC->bal = hauteur_arbre(AC->fdroite) - hauteur_arbre(AC->fgauche) ;
     if(AC->bal < -1 || AC->bal > 1)
       AC = Equilibrage(AC) ;
@@ -443,7 +426,7 @@ Dico detruire_cle_arbre (Dico a, int cle)
         a = ajouter_noeud(a,AP) ;
       if(AD != NULL)
         a = ajouter_noeud(a,AD) ;
-      
+
       if(AP != NULL){
         Temp = rechercher_cle_sup_arbre(a, AP->cle) ;
         AP = rechercher_cle_arbre(a, AP->cle) ;
