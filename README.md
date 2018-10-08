@@ -1,3 +1,3 @@
-# PLS
-Bienvenue dans la PLS globale
-Ceci est un test d'ajout
+== Projet Logiciel Système ==
+Développement en C d'un compresseur-décompresseur
+Algorithme de compression utilisé : LZW
