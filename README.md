@@ -1,3 +1,5 @@
-= Projet Logiciel Système =
-Développement en C d'un compresseur-décompresseur
-Algorithme de compression utilisé : LZW
+# Projet Logiciel Système
+
+## Description
+
+Creating a Compressor/Decompressor using LZW algorithm using C
